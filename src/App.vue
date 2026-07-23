@@ -341,12 +341,14 @@ const cycleTheme = () => {
 /* Dynamic Headline Slide Animation */
 .headline-container {
   display: block;
-  min-height: 1.15em;
+  min-height: 1.35em;
   position: relative;
+  padding-bottom: 0.15em;
 }
 
 .headline-text {
   display: block;
+  padding-bottom: 0.15em;
 }
 
 .headline-slide-enter-active,
