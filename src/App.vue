@@ -21,6 +21,7 @@
             <li><a href="#hero" class="nav-link interactive" :class="{ 'active': activeSection === 'hero' }">Home</a></li>
             <li><a href="#works" class="nav-link interactive" :class="{ 'active': activeSection === 'works' }">Works</a></li>
             <li><a href="#about" class="nav-link interactive" :class="{ 'active': activeSection === 'about' }">About</a></li>
+            <li><a href="#umkm-impact" class="nav-link interactive" :class="{ 'active': activeSection === 'umkm-impact' }">UMKM</a></li>
             <li><a href="#contact" class="nav-link interactive" :class="{ 'active': activeSection === 'contact' }">Contact</a></li>
           </ul>
         </nav>
@@ -62,7 +63,7 @@
           </h1>
           
           <p class="hero-desc">
-            Halo! Saya <span class="highlight-name interactive">Bagus Hari Wijaya</span>, kreator di balik <strong>kele design</strong>. Menghasilkan visual estetik yang fungsional secara profesional namun tetap berjiwa playful.
+            Halo! Saya <span class="highlight-name interactive">Bagus Hari Wijaya</span>, kreator di balik <strong>kele design</strong>. Menghasilkan sistem identitas merek, desain website, dan materi visual promosi yang fungsional secara profesional namun tetap berjiwa playful.
           </p>
           
           <div class="hero-buttons">
@@ -78,6 +79,9 @@
       <!-- Draggable Stickers Playground Overlay -->
       <InteractiveStickers />
     </section>
+
+    <!-- Animated Endless Logo Marquee Ticker -->
+    <LogoMarquee />
 
     <!-- Works / Portfolio Section -->
     <PortfolioGrid />
@@ -97,7 +101,7 @@
               </div>
               <div class="avatar-card-info">
                 <h3>Bagus Hari Wijaya</h3>
-                <p>Est. 2023 | Graphic Designer</p>
+                <p>Est. 2023 | Graphic & Brand Designer</p>
               </div>
             </div>
           </div>
@@ -108,7 +112,7 @@
             <h2 class="about-title text-gradient">Siapa di Balik Kele Design?</h2>
             
             <p class="about-p">
-              Saya adalah seorang desainer grafis independen yang berbasis di Jakarta. Berfokus pada pengembangan identitas merek (branding), antarmuka digital (UI/UX), dan eksplorasi tipografi eksperimental.
+              Saya adalah seorang desainer grafis & merek independen yang berbasis di Jakarta. Berfokus pada pengembangan sistem identitas brand (logo hingga merchandise), desain website digital (UI/UX), dan pendampingan visual usaha lokal (UMKM).
             </p>
             <p class="about-p">
               Bagi saya, desain bukan hanya tentang menyusun tata letak yang rapi, melainkan juga tentang menceritakan sebuah kisah dengan cara yang menyenangkan. Saya selalu menyisipkan sentuhan playful yang tak terduga ke dalam karya-karya profesional saya agar menghasilkan karya yang unik dan memorable.
@@ -124,6 +128,9 @@
         </div>
       </div>
     </section>
+
+    <!-- UMKM Impact Showcase Section -->
+    <UmkmImpact />
 
     <!-- Contact Section -->
     <section class="contact-section section-padding" id="contact">
@@ -202,10 +209,12 @@ import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 import KeleLogo from './components/KeleLogo.vue'
 import CustomCursor from './components/CustomCursor.vue'
 import InteractiveStickers from './components/InteractiveStickers.vue'
+import LogoMarquee from './components/LogoMarquee.vue'
 import PortfolioGrid from './components/PortfolioGrid.vue'
+import UmkmImpact from './components/UmkmImpact.vue'
 
 // Skills Data
-const skills = ['Branding & Identity', 'UI/UX Mobile Design', 'Experimental Typography', 'Vector Illustration', 'Motion Graphics', 'Packaging Design', 'Figma & Adobe CC']
+const skills = ['Full Brand Identity', 'Logo Motion Design', 'Website Design & UI/UX', 'UMKM Branding Upgrade', 'Experimental Typography', 'Packaging & Merch Design', 'Vector Illustration']
 
 // Form Submission logic
 const form = reactive({
@@ -217,7 +226,6 @@ const formSubmitting = ref(false)
 
 const handleSubmit = () => {
   formSubmitting.value = true
-  // Mock sending message
   setTimeout(() => {
     alert(`Terima kasih ${form.name}! Pesan Anda berhasil dikirim ke kele.designid@gmail.com.`)
     form.name = ''
@@ -234,8 +242,7 @@ const activeSection = ref('hero')
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 50
   
-  // Section tracking for active nav links
-  const sections = ['hero', 'works', 'about', 'contact']
+  const sections = ['hero', 'works', 'about', 'umkm-impact', 'contact']
   const scrollPos = window.scrollY + 120
   
   for (const section of sections) {
@@ -302,12 +309,11 @@ const themeStyles = computed(() => {
 
 const cycleTheme = () => {
   currentThemeIndex.value = (currentThemeIndex.value + 1) % themes.length
-  themeAngle.value += 120 // Rotate semicircle on theme picker button
+  themeAngle.value += 120
 }
 </script>
 
 <style>
-/* Reset some Vite default styles and handle base styles */
 #app {
   width: 100%;
   min-height: 100vh;

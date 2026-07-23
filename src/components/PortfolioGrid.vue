@@ -2,10 +2,10 @@
   <section class="portfolio-section section-padding" id="works">
     <div class="container">
       <div class="section-header">
-        <span class="category-pill">Visual Suites & Portfolio</span>
-        <h2 class="section-title text-gradient">Koleksi Desain Industri</h2>
+        <span class="category-pill">Visual Suites & Full Identity</span>
+        <h2 class="section-title text-gradient">Koleksi Desain & Brand Systems</h2>
         <p class="section-subtitle">
-          Kumpulan materi visual lintas industri — dari post feed, poster menu, hingga display kampanye promosi.
+          Dari logo, identitas merek, merchandise, antarmuka website, hingga materi promosi usaha lokal.
         </p>
       </div>
 
@@ -33,6 +33,12 @@
         >
           <div class="project-image-wrapper">
             <img :src="project.image" :alt="project.title" class="project-image" />
+            
+            <!-- Special Project Badge Tag -->
+            <div v-if="project.badge" class="special-badge-pill">
+              {{ project.badge }}
+            </div>
+
             <div class="project-overlay">
               <div class="view-pill">
                 <span>Lihat Visual Suite</span>
@@ -51,22 +57,33 @@
         </div>
       </TransitionGroup>
 
-      <!-- Case Study Modal -->
+      <!-- Case Study Modal with Multi-Slide Viewer -->
       <Transition name="modal">
         <div v-if="selectedProject" class="modal-overlay" @click.self="closeProject">
           <div class="modal-content glass-panel">
             <button class="modal-close-btn interactive" @click="closeProject">
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
             </button>
+            
             <div class="modal-body">
+              <!-- Multi-Slide Image Container -->
               <div class="modal-image-container">
-                <img :src="selectedProject.image" :alt="selectedProject.title" class="modal-image" />
+                <img :src="currentSlideImage" :alt="selectedProject.title" class="modal-image" />
+                
+                <!-- Slide Navigation Controls if project has multiple slides -->
+                <div v-if="selectedProject.slides && selectedProject.slides.length > 1" class="slide-nav-controls">
+                  <button @click="prevSlide" class="slide-btn interactive" title="Slide Sebelumnya">‹</button>
+                  <span class="slide-indicator">{{ activeSlideIndex + 1 }} / {{ selectedProject.slides.length }}</span>
+                  <button @click="nextSlide" class="slide-btn interactive" title="Slide Selanjutnya">›</button>
+                </div>
               </div>
+
+              <!-- Modal Text Content -->
               <div class="modal-text-content">
                 <div class="modal-header-info">
                   <div class="modal-badge-row">
+                    <span v-if="selectedProject.badge" class="special-badge-pill modal-special-badge">{{ selectedProject.badge }}</span>
                     <span class="modal-category">{{ selectedProject.category }}</span>
-                    <span class="modal-formats-badge">{{ selectedProject.mediaFormats }}</span>
                   </div>
                   <h2 class="modal-title">{{ selectedProject.title }}</h2>
                 </div>
@@ -94,7 +111,7 @@
                 </div>
                 
                 <div class="modal-desc-section">
-                  <h4 class="modal-section-title">Solusi Layout & Hirarki Desain</h4>
+                  <h4 class="modal-section-title">Solusi Layout & Branding</h4>
                   <p class="modal-paragraph">{{ selectedProject.solution }}</p>
                 </div>
               </div>
@@ -113,9 +130,11 @@ interface Project {
   id: number
   title: string
   category: string
+  badge?: string
   mediaFormats: string
   shortDesc: string
   image: string
+  slides?: string[]
   client: string
   year: string
   role: string
@@ -125,61 +144,83 @@ interface Project {
 
 const activeCategory = ref('All')
 const selectedProject = ref<Project | null>(null)
+const activeSlideIndex = ref(0)
 
-const categories = ['All', 'F&B / Culinary', 'Fashion & Lifestyle', 'Corporate & Tech', 'Retail & FMCG']
+const categories = ['All', 'Full Brand Systems', 'F&B & Retail', 'Web & Digital', 'Fashion & Corporate']
 
 const projects = ref<Project[]>([
   {
     id: 1,
-    title: 'Artisan Culinary & Menu Visual Suite',
-    category: 'F&B / Culinary',
-    mediaFormats: 'Social Media Feed • Menu Poster • POS Display',
-    shortDesc: 'Koleksi materi visual promosi kuliner kafe/resto meliputi feed Instagram, poster menu fisik, dan banner display.',
+    title: 'Kele Artisan Coffee & Bakery Identity',
+    category: 'Full Brand Systems',
+    badge: '⭐ Full Identity',
+    mediaFormats: 'Logo System • Guidelines • Merchandise • Packaging',
+    shortDesc: 'Sistem identitas merek komplit dari konstruksi logo, panduan warna, hingga kaos merchandise dan stiker kemasan.',
     image: '/assets/branding_mockup.png',
-    client: 'Kele Culinary Group',
+    slides: [
+      '/assets/branding_mockup.png',
+      '/assets/illustration_mockup.png',
+      '/assets/typography_mockup.png'
+    ],
+    client: 'Kele Coffee Co. (UMKM Partner)',
     year: '2024',
-    role: 'F&B Brand & Display Designer',
-    challenge: 'Klien F&B membutuhkan identitas visual yang menggugah selera sekaligus mempertahankan fleksibilitas layout untuk berbagai media cetak menu dan postingan promo digital harian.',
-    solution: 'Membangun sistem tata letak modular dengan hirarki harga yang tajam pada poster menu, dipadu dengan warna hangat selera makan dan aksen biru-kuning kele design yang memikat di feed sosial media.'
+    role: 'Lead Brand System Designer',
+    challenge: 'Usaha lokal kedai kopi & bakery membutuhkan identitas visual utuh dari logo hingga merch agar mampu bersaing dengan waralaba kopi besar.',
+    solution: 'Mendesain logogram geometris bermotif setengah lingkaran yang fleksibel diaplikasikan pada mug, kaos tim, kantong kemasan, serta stiker promo.'
   },
   {
     id: 2,
-    title: 'SaaS App & Digital Display Suite',
-    category: 'Corporate & Tech',
-    mediaFormats: 'App UI Showcase • Banner Ad • Promotional Post',
-    shortDesc: 'Rangkaian materi visual untuk produk teknologi aplikasi digital dan display promosi fitur.',
+    title: 'Space Explorer SaaS Web App',
+    category: 'Web & Digital',
+    badge: '🌐 Web Design',
+    mediaFormats: 'Website Design • UI/UX • Interactive Landing Page',
+    shortDesc: 'Desain website antarmuka interaktif dan landing page promosi aplikasi dengan visualisasi data gelap imersif.',
     image: '/assets/ui_ux_mockup.png',
-    client: 'Galaxy Tech',
+    slides: [
+      '/assets/ui_ux_mockup.png',
+      '/assets/typography_mockup.png'
+    ],
+    client: 'Galaxy Works Studio',
     year: '2025',
-    role: 'Tech Visual & UI Designer',
-    challenge: 'Menyajikan fitur aplikasi SaaS yang kompleks menjadi materi visual promosi yang mudah dipahami calon pengguna dalam waktu singkat.',
-    solution: 'Menggunakan tema antarmuka gelap dengan aksen glow neon cyan dan kartu glassmorphism yang meng-highlight fitur utama secara bersih.'
+    role: 'Web UI/UX Designer',
+    challenge: 'Merancang tata letak website yang responsif dan menyajikan fitur aplikasi digital secara visual tanpa membingungkan calon pembeli.',
+    solution: 'Membangun antarmuka bertema gelap pekat dengan efek glow-orb pada navigasi dan kartu glassmorphism yang responsif di seluruh layar.'
   },
   {
     id: 3,
-    title: 'Urban Apparel & Lookbook Suite',
-    category: 'Fashion & Lifestyle',
-    mediaFormats: 'Lookbook Feed • Poster Event • Campaign Display',
-    shortDesc: 'Koleksi visual kampanye fashion urban dengan eksplorasi tipografi eksperimental dan tata letak lookbook.',
-    image: '/assets/typography_mockup.png',
-    client: 'Synergy Fashion',
+    title: 'Artisan Culinary & Menu Suite',
+    category: 'F&B & Retail',
+    badge: '🌱 UMKM Partner',
+    mediaFormats: 'Social Media Feed • Menu Poster • POS Display',
+    shortDesc: 'Koleksi materi promosi cetak & digital tempat makan lokal meliputi menu fisik, feed Instagram, dan banner toko.',
+    image: '/assets/illustration_mockup.png',
+    slides: [
+      '/assets/illustration_mockup.png',
+      '/assets/branding_mockup.png'
+    ],
+    client: 'Warung Kuliner Nusantara (UMKM)',
     year: '2024',
-    role: 'Fashion Campaign Designer',
-    challenge: 'Membuat visual rilis produk pakaian street-style yang berani, artistik, dan mencolok di keramaian feed sosial media.',
-    solution: 'Menggabungkan tipografi distorsi geometris Plus Jakarta Sans dengan kontras warna pop-art yang tegas untuk memperkuat impresi visual.'
+    role: 'F&B Visual Designer',
+    challenge: 'Meningkatkan penjualan tempat makan lokal dengan memperbaiki hirarki baca poster menu dan visual feed promo sosial media.',
+    solution: 'Menerapkan tipografi menu legibel, penataan foto hidangan unggulan yang memikat selera makan, dan layout poster promo cetak yang tajam.'
   },
   {
     id: 4,
-    title: 'Consumer Goods & POS Display Suite',
-    category: 'Retail & FMCG',
-    mediaFormats: 'Packaging Graphic • Standee Banner • Feed Product Series',
-    shortDesc: 'Desain visual promosi produk retail FMCG meliputi grafis kemasan dan banner display toko.',
-    image: '/assets/illustration_mockup.png',
-    client: 'Retro-Tech FMCG',
+    title: 'Urban Apparel & Streetwear Suite',
+    category: 'Fashion & Corporate',
+    badge: '⭐ Full Identity',
+    mediaFormats: 'Lookbook Feed • Merchandise • Launch Poster',
+    shortDesc: 'Desain kampanye brand pakaian street-style meliputi seri poster acara, merchandise kaos, dan lookbook sosial media.',
+    image: '/assets/typography_mockup.png',
+    slides: [
+      '/assets/typography_mockup.png',
+      '/assets/branding_mockup.png'
+    ],
+    client: 'Synergy Urban Apparel',
     year: '2024',
-    role: 'Retail Graphic Illustrator',
-    challenge: 'Meningkatkan daya tarik produk retail di rak fisik dan feed e-commerce dengan estetika modern nostalgia.',
-    solution: 'Menerapkan ilustrasi vektor retro-futuristik bergaris bersih dan gradasi warna neon cerah yang meningkatkan eye-catching factor.'
+    role: 'Fashion Campaign & Merch Designer',
+    challenge: 'Membuat visual rilis produk pakaian street-style yang berani, artistik, dan mencolok di keramaian feed sosial media.',
+    solution: 'Menggabungkan tipografi distorsi geometris Plus Jakarta Sans dengan kontras warna pop-art yang tegas untuk memperkuat impresi visual.'
   }
 ])
 
@@ -188,14 +229,35 @@ const filteredProjects = computed(() => {
   return projects.value.filter(p => p.category === activeCategory.value)
 })
 
+const currentSlideImage = computed(() => {
+  if (!selectedProject.value) return ''
+  if (selectedProject.value.slides && selectedProject.value.slides.length > 0) {
+    return selectedProject.value.slides[activeSlideIndex.value] || selectedProject.value.image
+  }
+  return selectedProject.value.image
+})
+
 const openProject = (project: Project) => {
   selectedProject.value = project
+  activeSlideIndex.value = 0
   document.body.style.overflow = 'hidden' // prevent body scrolling
 }
 
 const closeProject = () => {
   selectedProject.value = null
   document.body.style.overflow = 'auto' // restore body scrolling
+}
+
+const nextSlide = () => {
+  if (selectedProject.value?.slides) {
+    activeSlideIndex.value = (activeSlideIndex.value + 1) % selectedProject.value.slides.length
+  }
+}
+
+const prevSlide = () => {
+  if (selectedProject.value?.slides) {
+    activeSlideIndex.value = (activeSlideIndex.value - 1 + selectedProject.value.slides.length) % selectedProject.value.slides.length
+  }
 }
 </script>
 
@@ -309,6 +371,23 @@ const closeProject = () => {
 
 .project-card:hover .project-image {
   transform: scale(1.05);
+}
+
+.special-badge-pill {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(8, 13, 26, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  z-index: 5;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 .project-overlay {
@@ -465,7 +544,7 @@ const closeProject = () => {
   align-items: center;
   justify-content: center;
   transition: var(--transition-bounce);
-  z-index: 10;
+  z-index: 20;
 }
 
 .modal-close-btn:hover {
@@ -487,12 +566,51 @@ const closeProject = () => {
   align-items: center;
   justify-content: center;
   border-right: 1px solid var(--border-color);
+  position: relative;
 }
 
 .modal-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Slide controls */
+.slide-nav-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(8, 13, 26, 0.85);
+  backdrop-filter: blur(8px);
+  padding: 6px 16px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.slide-btn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0 4px;
+  transition: var(--transition-bounce);
+}
+
+.slide-btn:hover {
+  color: var(--color-accent);
+  transform: scale(1.3);
+}
+
+.slide-indicator {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
 }
 
 .modal-text-content {
@@ -513,21 +631,18 @@ const closeProject = () => {
   flex-wrap: wrap;
 }
 
+.modal-special-badge {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
 .modal-category {
   color: var(--color-accent);
   font-weight: 700;
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-}
-
-.modal-formats-badge {
-  color: var(--color-text-muted);
-  font-size: 0.75rem;
-  background: rgba(255, 255, 255, 0.06);
-  padding: 4px 12px;
-  border-radius: 50px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .modal-title {
