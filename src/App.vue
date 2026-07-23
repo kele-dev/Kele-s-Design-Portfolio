@@ -1,12 +1,7 @@
 <template>
   <div :style="themeStyles">
-    <!-- Grid Background -->
-    <div class="grid-bg"></div>
-    
-    <!-- Glow Orbs -->
-    <div class="glow-orb" style="top: 10%; left: 15%;"></div>
-    <div class="glow-orb yellow" style="top: 40%; right: 10%;"></div>
-    <div class="glow-orb" style="top: 70%; left: 20%;"></div>
+    <!-- Creative Animated Background Layer -->
+    <CreativeBackground />
 
     <!-- Custom Cursor -->
     <CustomCursor />
@@ -205,6 +200,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
+import CreativeBackground from './components/CreativeBackground.vue'
 import KeleLogo from './components/KeleLogo.vue'
 import CustomCursor from './components/CustomCursor.vue'
 import InteractiveStickers from './components/InteractiveStickers.vue'
