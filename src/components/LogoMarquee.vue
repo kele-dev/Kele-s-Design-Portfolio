@@ -11,8 +11,9 @@
           v-for="(logo, index) in [...logos, ...logos]" 
           :key="index"
           class="logo-item glass-panel interactive"
+          :style="{ '--brand-color': logo.color }"
         >
-          <div class="logo-icon-wrapper" :style="{ color: logo.color }">
+          <div class="logo-icon-wrapper">
             <svg viewBox="0 0 40 40" class="mini-logo-svg">
               <circle cx="20" cy="20" r="16" fill="currentColor" opacity="0.15" />
               <path :d="logo.path" fill="currentColor" class="animated-path" />
@@ -49,7 +50,7 @@ const logos = ref<LogoMark[]>([
 <style scoped>
 .marquee-section {
   width: 100%;
-  padding: 40px 0;
+  padding: 36px 0;
   overflow: hidden;
   position: relative;
   background: rgba(4, 7, 15, 0.4);
@@ -87,7 +88,7 @@ const logos = ref<LogoMark[]>([
 }
 
 .marquee-container:hover .marquee-track {
-  animation-play-state: paused; /* Pause scrolling on mouse hover for interactive exploration */
+  animation-play-state: paused;
 }
 
 .logo-item {
@@ -100,12 +101,14 @@ const logos = ref<LogoMark[]>([
   background: rgba(13, 22, 46, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.08);
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, background 0.3s;
+  color: rgba(255, 255, 255, 0.5); /* Default Monochrome Translucent */
 }
 
 .logo-item:hover {
   transform: translateY(-4px) scale(1.05);
-  border-color: var(--color-accent);
-  background: rgba(20, 32, 64, 0.8);
+  border-color: var(--brand-color);
+  background: rgba(20, 32, 64, 0.85);
+  color: var(--brand-color); /* Original Brand Color on Hover */
 }
 
 .logo-icon-wrapper {
@@ -133,6 +136,11 @@ const logos = ref<LogoMark[]>([
 .logo-name {
   font-weight: 700;
   font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.8);
+  transition: color 0.3s;
+}
+
+.logo-item:hover .logo-name {
   color: #ffffff;
 }
 

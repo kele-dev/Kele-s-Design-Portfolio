@@ -92,16 +92,15 @@
         <div class="about-grid">
           <!-- Left Visual Element -->
           <div class="about-visual-col" v-motion-slide-visible-once-left>
-            <div class="avatar-card glass-panel">
-              <div class="avatar-shapes">
-                <!-- A creative layout of shapes mimicking a playful design avatar -->
-                <div class="avatar-circle"></div>
-                <div class="avatar-semicircle"></div>
-                <div class="avatar-square"></div>
+            <div class="avatar-card glass-panel interactive">
+              <div class="avatar-photo-wrapper">
+                <div class="photo-backdrop-circle"></div>
+                <div class="photo-backdrop-semicircle"></div>
+                <img src="/assets/bagus_photo.png" alt="Bagus Hari Wijaya — kele design" class="user-photo" />
               </div>
               <div class="avatar-card-info">
                 <h3>Bagus Hari Wijaya</h3>
-                <p>Est. 2023 | Graphic & Brand Designer</p>
+                <p>Graphic & Brand Designer — kele design</p>
               </div>
             </div>
           </div>
