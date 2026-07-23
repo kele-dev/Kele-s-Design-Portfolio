@@ -53,7 +53,13 @@
           </div>
           
           <h1 class="hero-title">
-            <span class="light-title">Bringing Ideas & Impact</span> 
+            <span class="headline-container">
+              <Transition name="headline-slide" mode="out-in">
+                <span :key="activeHeadlineIndex" class="light-title headline-text">
+                  {{ headlines[activeHeadlineIndex] }}
+                </span>
+              </Transition>
+            </span>
             <span class="text-accent-gradient bold-title">Through Design.</span>
           </h1>
           
@@ -208,6 +214,18 @@ import LogoMarquee from './components/LogoMarquee.vue'
 import PortfolioGrid from './components/PortfolioGrid.vue'
 import UmkmImpact from './components/UmkmImpact.vue'
 
+// High-Value Rotating Headline Text Phrases
+const headlines = [
+  'Bringing Ideas & Impact',
+  'Solving Complex Problems',
+  'Elevating Local Brands',
+  'Driving Business Growth',
+  'Creating Visual Value'
+]
+
+const activeHeadlineIndex = ref(0)
+let headlineTimer: number | undefined
+
 // Skills Data
 const skills = ['Full Brand Identity', 'Logo Motion Design', 'Website Design & UI/UX', 'UMKM Branding Upgrade', 'Experimental Typography', 'Packaging & Merch Design', 'Vector Illustration']
 
@@ -254,10 +272,16 @@ const handleScroll = () => {
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
+  
+  // Rotate headline every 3.2 seconds
+  headlineTimer = window.setInterval(() => {
+    activeHeadlineIndex.value = (activeHeadlineIndex.value + 1) % headlines.length
+  }, 3200)
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  if (headlineTimer) clearInterval(headlineTimer)
 })
 
 // Playful theme cycling logic
@@ -312,5 +336,32 @@ const cycleTheme = () => {
 #app {
   width: 100%;
   min-height: 100vh;
+}
+
+/* Dynamic Headline Slide Animation */
+.headline-container {
+  display: block;
+  min-height: 1.15em;
+  overflow: hidden;
+  position: relative;
+}
+
+.headline-text {
+  display: block;
+}
+
+.headline-slide-enter-active,
+.headline-slide-leave-active {
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+}
+
+.headline-slide-enter-from {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.headline-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
 }
 </style>
