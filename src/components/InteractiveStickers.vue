@@ -3,7 +3,7 @@
     <div class="playground-overlay">
       <span class="hint-pill">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="spark-icon"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z"/></svg>
-        Playground: Seret stiker ke mana saja!
+        Playground: Stiker melayang & bisa diseret!
       </span>
     </div>
     
@@ -128,7 +128,7 @@ const startDrag = (event: PointerEvent, sticker: Sticker) => {
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none; /* Let clicks pass through area to background */
+  pointer-events: none;
   z-index: 5;
   overflow: hidden;
 }
@@ -168,7 +168,7 @@ const startDrag = (event: PointerEvent, sticker: Sticker) => {
   font-weight: 700;
   font-size: 1rem;
   letter-spacing: -0.5px;
-  pointer-events: auto; /* Active pointer events for dragging */
+  pointer-events: auto;
   user-select: none;
   cursor: grab;
   transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -177,13 +177,40 @@ const startDrag = (event: PointerEvent, sticker: Sticker) => {
 
 .sticker.dragging {
   cursor: grabbing;
-  transition: transform 0.05s ease-out; /* instant feedback when dragging */
+  transition: transform 0.05s ease-out;
 }
 
+/* Floating Bobbing Animation for Inner Sticker Content */
 .sticker-inner {
   display: flex;
   align-items: center;
   justify-content: center;
+  animation: float-bobbing 4s infinite ease-in-out alternate;
+}
+
+/* Varied Floating Speeds & Delays for Organic Unsynchronized Movement */
+.sticker:nth-child(1) .sticker-inner { animation-duration: 4.2s; animation-delay: 0s; }
+.sticker:nth-child(2) .sticker-inner { animation-duration: 3.8s; animation-delay: -1.2s; }
+.sticker:nth-child(3) .sticker-inner { animation-duration: 4.6s; animation-delay: -2.4s; }
+.sticker:nth-child(4) .sticker-inner { animation-duration: 3.5s; animation-delay: -0.8s; }
+.sticker:nth-child(5) .sticker-inner { animation-duration: 4.0s; animation-delay: -1.8s; }
+.sticker:nth-child(6) .sticker-inner { animation-duration: 4.8s; animation-delay: -3.1s; }
+
+/* Pause floating animation smoothly while user drags sticker */
+.sticker.dragging .sticker-inner {
+  animation-play-state: paused !important;
+}
+
+@keyframes float-bobbing {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(2.5deg);
+  }
+  100% {
+    transform: translateY(8px) rotate(-2deg);
+  }
 }
 
 /* Kele design special sticker style */
@@ -204,7 +231,7 @@ const startDrag = (event: PointerEvent, sticker: Sticker) => {
   width: 14px;
   height: 28px;
   background: var(--color-accent);
-  border-radius: 0 14px 14px 0; /* semicircle shape */
+  border-radius: 0 14px 14px 0;
   margin-left: 2px;
 }
 
