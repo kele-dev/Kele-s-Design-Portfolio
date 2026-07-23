@@ -342,14 +342,11 @@ const cycleTheme = () => {
 .headline-container {
   display: block;
   min-height: 1.15em;
-  overflow: hidden;
   position: relative;
-  white-space: nowrap;
 }
 
 .headline-text {
   display: block;
-  white-space: nowrap;
 }
 
 .headline-slide-enter-active,
