@@ -56,7 +56,8 @@
             <span class="headline-container">
               <Transition name="headline-slide" mode="out-in">
                 <span :key="activeHeadlineIndex" class="light-title headline-text">
-                  {{ headlines[activeHeadlineIndex] }}
+                  <span class="phrase-line">{{ headlines[activeHeadlineIndex].line1 }}</span>
+                  <span class="phrase-line">{{ headlines[activeHeadlineIndex].line2 }}</span>
                 </span>
               </Transition>
             </span>
@@ -214,13 +215,18 @@ import LogoMarquee from './components/LogoMarquee.vue'
 import PortfolioGrid from './components/PortfolioGrid.vue'
 import UmkmImpact from './components/UmkmImpact.vue'
 
-// High-Value Rotating Headline Text Phrases
-const headlines = [
-  'Bringing Ideas & Impact',
-  'Solving Complex Problems',
-  'Elevating Local Brands',
-  'Driving Business Growth',
-  'Creating Visual Value'
+// Structuring each top rotating phrase into 2 clean lines
+interface HeadlinePhrase {
+  line1: string
+  line2: string
+}
+
+const headlines: HeadlinePhrase[] = [
+  { line1: 'Bringing Ideas', line2: '& Impact' },
+  { line1: 'Solving Complex', line2: 'Problems' },
+  { line1: 'Elevating Local', line2: 'Brands' },
+  { line1: 'Driving Business', line2: 'Growth' },
+  { line1: 'Creating Visual', line2: 'Value' }
 ]
 
 const activeHeadlineIndex = ref(0)
@@ -341,14 +347,18 @@ const cycleTheme = () => {
 /* Dynamic Headline Slide Animation */
 .headline-container {
   display: block;
-  min-height: 1.35em;
+  min-height: 2.2em;
   position: relative;
-  padding-bottom: 0.15em;
+  padding-bottom: 0.1em;
 }
 
 .headline-text {
   display: block;
-  padding-bottom: 0.15em;
+}
+
+.phrase-line {
+  display: block;
+  line-height: 1.05;
 }
 
 .headline-slide-enter-active,
