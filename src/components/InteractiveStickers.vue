@@ -3,7 +3,7 @@
     <div class="playground-overlay">
       <span class="hint-pill">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="spark-icon"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z"/></svg>
-        Playground: Stiker melayang & bisa diseret!
+        Playground: Stiker melayang dinamis & bisa diseret!
       </span>
     </div>
     
@@ -20,12 +20,12 @@
     >
       <div 
         class="sticker interactive"
+        :class="`float-pattern-${sticker.id}`"
         :style="{ 
-          transform: `rotate(${sticker.rotation}deg) scale(${sticker.isDragging ? 1.08 : 1})`,
           background: sticker.bg,
           color: sticker.color,
           border: sticker.border,
-          boxShadow: sticker.isDragging ? '0 18px 35px rgba(0,0,0,0.5)' : '0 10px 20px rgba(0,0,0,0.25)'
+          boxShadow: sticker.isDragging ? '0 20px 40px rgba(0,0,0,0.5)' : '0 10px 22px rgba(0,0,0,0.25)'
         }"
       >
         <!-- Optional Semicircle logo inside kele design sticker -->
@@ -188,33 +188,81 @@ const startDrag = (event: PointerEvent, sticker: Sticker) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s;
-  animation: float-bobbing 4s infinite ease-in-out alternate;
+  transition: box-shadow 0.2s;
 }
 
-/* Varied Floating Speeds & Delays for Entire Sticker Badges */
-.sticker-wrapper:nth-child(1) .sticker { animation-duration: 4.2s; animation-delay: 0s; }
-.sticker-wrapper:nth-child(2) .sticker { animation-duration: 3.8s; animation-delay: -1.2s; }
-.sticker-wrapper:nth-child(3) .sticker { animation-duration: 4.6s; animation-delay: -2.4s; }
-.sticker-wrapper:nth-child(4) .sticker { animation-duration: 3.5s; animation-delay: -0.8s; }
-.sticker-wrapper:nth-child(5) .sticker { animation-duration: 4.0s; animation-delay: -1.8s; }
-.sticker-wrapper:nth-child(6) .sticker { animation-duration: 4.8s; animation-delay: -3.1s; }
-
-/* Pause floating animation smoothly while user drags sticker */
+/* Pause float animation smoothly during drag */
 .sticker-wrapper.dragging .sticker {
   animation-play-state: paused !important;
+  transform: scale(1.1) !important;
 }
 
-@keyframes float-bobbing {
-  0% {
-    transform: translateY(0px) rotate(var(--sticker-rot, 0deg));
-  }
-  50% {
-    transform: translateY(-16px) rotate(calc(var(--sticker-rot, 0deg) + 3deg));
-  }
-  100% {
-    transform: translateY(10px) rotate(calc(var(--sticker-rot, 0deg) - 2.5deg));
-  }
+/* Pattern 1: Elliptical & Tilt Drift */
+.float-pattern-1 {
+  animation: float-path-1 6s infinite ease-in-out alternate;
+}
+@keyframes float-path-1 {
+  0% { transform: translate(0px, 0px) rotate(-10deg) scale(1); }
+  25% { transform: translate(16px, -20px) rotate(-4deg) scale(1.04); }
+  50% { transform: translate(-12px, 14px) rotate(6deg) scale(0.96); }
+  75% { transform: translate(-20px, -14px) rotate(-16deg) scale(1.02); }
+  100% { transform: translate(0px, 0px) rotate(-10deg) scale(1); }
+}
+
+/* Pattern 2: Diagonal Up-Right & Spin Tilt */
+.float-pattern-2 {
+  animation: float-path-2 7s infinite ease-in-out alternate;
+}
+@keyframes float-path-2 {
+  0% { transform: translate(0px, 0px) rotate(8deg) scale(1); }
+  33% { transform: translate(-24px, -18px) rotate(20deg) scale(1.06); }
+  66% { transform: translate(18px, 22px) rotate(-4deg) scale(0.95); }
+  100% { transform: translate(0px, 0px) rotate(8deg) scale(1); }
+}
+
+/* Pattern 3: Swaying 360 Spin & Drift */
+.float-pattern-3 {
+  animation: float-path-3 8s infinite ease-in-out alternate;
+}
+@keyframes float-path-3 {
+  0% { transform: translate(0px, 0px) rotate(-5deg) scale(1); }
+  25% { transform: translate(22px, 16px) rotate(18deg) scale(1.05); }
+  50% { transform: translate(-18px, -24px) rotate(-25deg) scale(0.94); }
+  75% { transform: translate(14px, -10px) rotate(10deg) scale(1.03); }
+  100% { transform: translate(0px, 0px) rotate(-5deg) scale(1); }
+}
+
+/* Pattern 4: Horizontal Wave & Pulse */
+.float-pattern-4 {
+  animation: float-path-4 5.5s infinite ease-in-out alternate;
+}
+@keyframes float-path-4 {
+  0% { transform: translate(0px, 0px) rotate(12deg) scale(1); }
+  50% { transform: translate(-30px, 12px) rotate(-10deg) scale(1.07); }
+  100% { transform: translate(0px, 0px) rotate(12deg) scale(1); }
+}
+
+/* Pattern 5: S-Curve Diagonal Wave */
+.float-pattern-5 {
+  animation: float-path-5 6.5s infinite ease-in-out alternate;
+}
+@keyframes float-path-5 {
+  0% { transform: translate(0px, 0px) rotate(-15deg) scale(1); }
+  30% { transform: translate(26px, -18px) rotate(0deg) scale(1.05); }
+  70% { transform: translate(-18px, 24px) rotate(-26deg) scale(0.95); }
+  100% { transform: translate(0px, 0px) rotate(-15deg) scale(1); }
+}
+
+/* Pattern 6: Infinity Loop Drift */
+.float-pattern-6 {
+  animation: float-path-6 7.5s infinite ease-in-out alternate;
+}
+@keyframes float-path-6 {
+  0% { transform: translate(0px, 0px) rotate(4deg) scale(1); }
+  25% { transform: translate(-20px, 18px) rotate(-14deg) scale(1.05); }
+  50% { transform: translate(18px, -20px) rotate(18deg) scale(0.94); }
+  75% { transform: translate(22px, 14px) rotate(-8deg) scale(1.03); }
+  100% { transform: translate(0px, 0px) rotate(4deg) scale(1); }
 }
 
 /* Kele design special sticker style */
