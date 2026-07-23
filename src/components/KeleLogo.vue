@@ -1,17 +1,13 @@
 <template>
   <div class="logo-container interactive" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
-    <svg viewBox="0 0 220 80" class="logo-svg">
-      <!-- kele text -->
-      <text x="10" y="52" class="logo-text-kele">kele</text>
-      <!-- design text -->
-      <text x="105" y="70" class="logo-text-design">design</text>
-      <!-- Semicircle/D icon -->
-      <path 
-        d="M 165 17 A 26 26 0 0 1 165 69 Z" 
-        class="logo-semicircle"
-        :class="{ 'logo-semicircle-hover': isHovered }"
+    <a href="#hero" class="logo-link">
+      <img 
+        src="/assets/kele_logo_official.png" 
+        alt="kele design" 
+        class="official-logo-img" 
+        :class="{ 'logo-hovered': isHovered }" 
       />
-    </svg>
+    </a>
   </div>
 </template>
 
@@ -23,43 +19,28 @@ const isHovered = ref(false)
 
 <style scoped>
 .logo-container {
-  display: inline-block;
-  width: 170px;
-  height: 60px;
+  display: inline-flex;
+  align-items: center;
+  height: 50px;
   user-select: none;
 }
 
-.logo-svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
+.logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
 }
 
-.logo-text-kele {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 800;
-  font-size: 46px;
-  fill: #ffffff;
-  letter-spacing: -2px;
+.official-logo-img {
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.4));
 }
 
-.logo-text-design {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 300;
-  font-size: 18px;
-  fill: #ffffff;
-  letter-spacing: 0.5px;
-  opacity: 0.95;
-}
-
-.logo-semicircle {
-  fill: var(--color-accent);
-  transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), fill 0.3s;
-  transform-origin: 165px 43px;
-}
-
-.logo-semicircle-hover {
-  transform: scale(1.2) rotate(180deg);
-  fill: #ffea00;
+.logo-hovered {
+  transform: scale(1.08) translateY(-2px);
+  filter: drop-shadow(0 4px 20px rgba(255, 210, 0, 0.5));
 }
 </style>
