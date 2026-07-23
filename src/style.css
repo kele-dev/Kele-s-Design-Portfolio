@@ -386,7 +386,7 @@ html, body {
 }
 
 .hero-content {
-  max-width: 950px;
+  max-width: 900px;
   position: relative;
 }
 
@@ -419,9 +419,9 @@ html, body {
 }
 
 .hero-title {
-  font-size: clamp(2rem, 3.8vw, 3.6rem);
-  line-height: 1.15;
-  letter-spacing: -1.5px;
+  font-size: clamp(3rem, 5.2vw, 4.8rem);
+  line-height: 1.1;
+  letter-spacing: -2px;
   margin-bottom: 24px;
   font-weight: 800;
 }
