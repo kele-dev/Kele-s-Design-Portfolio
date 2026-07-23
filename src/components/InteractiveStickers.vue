@@ -10,19 +10,24 @@
     <div 
       v-for="sticker in stickers" 
       :key="sticker.id"
-      class="sticker interactive"
+      class="sticker-wrapper"
       :class="{ 'dragging': sticker.isDragging }"
       :style="{ 
-        transform: `translate(${sticker.x}px, ${sticker.y}px) rotate(${sticker.rotation}deg) scale(${sticker.isDragging ? 1.08 : 1})`,
-        zIndex: sticker.zIndex,
-        background: sticker.bg,
-        color: sticker.color,
-        border: sticker.border,
-        boxShadow: sticker.isDragging ? '0 15px 30px rgba(0,0,0,0.4)' : '0 8px 16px rgba(0,0,0,0.2)'
+        transform: `translate(${sticker.x}px, ${sticker.y}px)`,
+        zIndex: sticker.zIndex
       }"
       @pointerdown="startDrag($event, sticker)"
     >
-      <div class="sticker-inner">
+      <div 
+        class="sticker interactive"
+        :style="{ 
+          transform: `rotate(${sticker.rotation}deg) scale(${sticker.isDragging ? 1.08 : 1})`,
+          background: sticker.bg,
+          color: sticker.color,
+          border: sticker.border,
+          boxShadow: sticker.isDragging ? '0 18px 35px rgba(0,0,0,0.5)' : '0 10px 20px rgba(0,0,0,0.25)'
+        }"
+      >
         <!-- Optional Semicircle logo inside kele design sticker -->
         <div v-if="sticker.hasHalfMoon" class="mini-logo-wrapper">
           <span class="bold-text">kele</span>
@@ -161,55 +166,54 @@ const startDrag = (event: PointerEvent, sticker: Sticker) => {
   animation: pulse 2s infinite ease-in-out;
 }
 
-.sticker {
+.sticker-wrapper {
   position: absolute;
-  padding: 12px 24px;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 1rem;
-  letter-spacing: -0.5px;
   pointer-events: auto;
   user-select: none;
   cursor: grab;
-  transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
-  white-space: nowrap;
+  will-change: transform;
 }
 
-.sticker.dragging {
+.sticker-wrapper.dragging {
   cursor: grabbing;
-  transition: transform 0.05s ease-out;
 }
 
-/* Floating Bobbing Animation for Inner Sticker Content */
-.sticker-inner {
+.sticker {
+  padding: 12px 24px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.5px;
+  white-space: nowrap;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s;
   animation: float-bobbing 4s infinite ease-in-out alternate;
 }
 
-/* Varied Floating Speeds & Delays for Organic Unsynchronized Movement */
-.sticker:nth-child(1) .sticker-inner { animation-duration: 4.2s; animation-delay: 0s; }
-.sticker:nth-child(2) .sticker-inner { animation-duration: 3.8s; animation-delay: -1.2s; }
-.sticker:nth-child(3) .sticker-inner { animation-duration: 4.6s; animation-delay: -2.4s; }
-.sticker:nth-child(4) .sticker-inner { animation-duration: 3.5s; animation-delay: -0.8s; }
-.sticker:nth-child(5) .sticker-inner { animation-duration: 4.0s; animation-delay: -1.8s; }
-.sticker:nth-child(6) .sticker-inner { animation-duration: 4.8s; animation-delay: -3.1s; }
+/* Varied Floating Speeds & Delays for Entire Sticker Badges */
+.sticker-wrapper:nth-child(1) .sticker { animation-duration: 4.2s; animation-delay: 0s; }
+.sticker-wrapper:nth-child(2) .sticker { animation-duration: 3.8s; animation-delay: -1.2s; }
+.sticker-wrapper:nth-child(3) .sticker { animation-duration: 4.6s; animation-delay: -2.4s; }
+.sticker-wrapper:nth-child(4) .sticker { animation-duration: 3.5s; animation-delay: -0.8s; }
+.sticker-wrapper:nth-child(5) .sticker { animation-duration: 4.0s; animation-delay: -1.8s; }
+.sticker-wrapper:nth-child(6) .sticker { animation-duration: 4.8s; animation-delay: -3.1s; }
 
 /* Pause floating animation smoothly while user drags sticker */
-.sticker.dragging .sticker-inner {
+.sticker-wrapper.dragging .sticker {
   animation-play-state: paused !important;
 }
 
 @keyframes float-bobbing {
   0% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translateY(0px) rotate(var(--sticker-rot, 0deg));
   }
   50% {
-    transform: translateY(-14px) rotate(2.5deg);
+    transform: translateY(-16px) rotate(calc(var(--sticker-rot, 0deg) + 3deg));
   }
   100% {
-    transform: translateY(8px) rotate(-2deg);
+    transform: translateY(10px) rotate(calc(var(--sticker-rot, 0deg) - 2.5deg));
   }
 }
 
