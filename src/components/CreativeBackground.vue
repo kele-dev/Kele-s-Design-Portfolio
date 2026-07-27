@@ -23,10 +23,7 @@
         <span>CMYK: 100 • 50 • 0 • 0</span>
       </div>
 
-      <div class="design-annotation annotation-2">
-        <span class="anno-badge">300 DPI</span>
-        <span>VECTOR CANVAS</span>
-      </div>
+
 
       <div class="design-annotation annotation-3">
         <span>KELE DESIGN SYSTEM • 2026</span>
