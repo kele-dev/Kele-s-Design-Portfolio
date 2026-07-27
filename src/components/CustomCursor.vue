@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isMobile" class="custom-cursor-container">
+  <div v-if="!isMobile" class="custom-cursor-container" :class="{ 'has-moved': hasMoved }">
     <div 
       class="custom-cursor-dot" 
       :style="{ left: dotX + 'px', top: dotY + 'px' }"
@@ -16,36 +16,47 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 
-const dotX = ref(0)
-const dotY = ref(0)
-const ringX = ref(0)
-const ringY = ref(0)
+const dotX = ref(-100)
+const dotY = ref(-100)
+const ringX = ref(-100)
+const ringY = ref(-100)
 const isHovering = ref(false)
 const isMobile = ref(true)
+const hasMoved = ref(false)
 
-let targetX = 0
-let targetY = 0
+let targetX = -100
+let targetY = -100
 
 const updatePosition = (e: MouseEvent) => {
+  if (!hasMoved.value) {
+    hasMoved.value = true
+    ringX.value = e.clientX
+    ringY.value = e.clientY
+  }
+  
   targetX = e.clientX
   targetY = e.clientY
   
-  // The small dot follows the mouse instantly
   dotX.value = targetX
   dotY.value = targetY
 }
 
 const checkHover = () => {
-  const hoveredEl = document.querySelector(':hover')
-  if (hoveredEl) {
-    const isInteractive = hoveredEl.closest('.interactive') || 
-                          hoveredEl.closest('a') || 
-                          hoveredEl.closest('button') ||
-                          hoveredEl.closest('input') ||
-                          hoveredEl.closest('textarea') ||
-                          window.getComputedStyle(hoveredEl).cursor === 'pointer'
-    isHovering.value = !!isInteractive
-  } else {
+  try {
+    const hoveredEl = document.querySelector(':hover')
+    if (hoveredEl) {
+      const isInteractive = hoveredEl.closest('.interactive') || 
+                            hoveredEl.closest('a') || 
+                            hoveredEl.closest('button') ||
+                            hoveredEl.closest('input') ||
+                            hoveredEl.closest('textarea') ||
+                            hoveredEl.closest('[role="button"]') ||
+                            window.getComputedStyle(hoveredEl).cursor === 'pointer'
+      isHovering.value = !!isInteractive
+    } else {
+      isHovering.value = false
+    }
+  } catch (err) {
     isHovering.value = false
   }
 }
@@ -53,8 +64,7 @@ const checkHover = () => {
 let animationFrameId: number
 
 const animateRing = () => {
-  // Smooth spring-like easing for the trailing outer ring
-  const ease = 0.15
+  const ease = 0.18
   ringX.value += (targetX - ringX.value) * ease
   ringY.value += (targetY - ringY.value) * ease
   
@@ -92,6 +102,12 @@ onMounted(() => {
   width: 100vw;
   height: 100vh;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 99999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.custom-cursor-container.has-moved {
+  opacity: 1;
 }
 </style>
