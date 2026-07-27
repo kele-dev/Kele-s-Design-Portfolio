@@ -49,11 +49,11 @@
         <div class="hero-content" v-motion-fade>
           <div class="hero-badge-wrapper">
             <div class="hero-badge">
-              <span>DESIGN STUDIO</span>
+              <span>Branding</span>
               <div class="badge-semicircle"></div>
-              <span>BRANDING</span>
+              <span>Graphic Design</span>
               <div class="badge-semicircle"></div>
-              <span>VISUAL SUITE</span>
+              <span>Web Development</span>
             </div>
           </div>
           
