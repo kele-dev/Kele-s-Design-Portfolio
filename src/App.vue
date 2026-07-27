@@ -389,21 +389,31 @@ onUnmounted(() => {
   font-weight: 600;
   transition: color 0.25s ease;
   position: relative;
+  padding: 4px 0;
+  display: inline-block;
 }
 
 .nav-link:hover, .nav-link.active {
   color: var(--text-primary);
 }
 
-.nav-link.active::after {
+.nav-link::after {
   content: '';
   position: absolute;
   bottom: -4px;
-  left: 0;
-  right: 0;
+  left: 50%;
+  width: 100%;
   height: 2px;
   background-color: var(--text-primary);
   border-radius: 2px;
+  transform: translateX(-50%) scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
+}
+
+.nav-link.active::after,
+.nav-link:hover::after {
+  transform: translateX(-50%) scaleX(1);
 }
 
 .nav-actions {
