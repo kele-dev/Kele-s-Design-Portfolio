@@ -21,7 +21,7 @@ const isHovered = ref(false)
 .logo-container {
   display: inline-flex;
   align-items: center;
-  height: 50px;
+  height: 42px;
   user-select: none;
 }
 
@@ -32,7 +32,7 @@ const isHovered = ref(false)
 }
 
 .official-logo-img {
-  height: 44px;
+  height: 38px;
   width: auto;
   object-fit: contain;
   transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s;

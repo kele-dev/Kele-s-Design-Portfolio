@@ -351,8 +351,8 @@ onUnmounted(() => {
   justify-content: space-between;
   gap: 1.5rem;
   width: 100%;
-  max-width: 1060px;
-  padding: 0.6rem 1.25rem;
+  max-width: 1080px;
+  padding: 0.55rem 1.4rem 0.55rem 1.6rem;
   background: var(--bg-glass);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
@@ -369,6 +369,8 @@ onUnmounted(() => {
 .nav-brand {
   display: flex;
   align-items: center;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
 }
 
 .nav-links {
