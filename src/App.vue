@@ -436,11 +436,12 @@ onUnmounted(() => {
   left: 50%;
   width: 100%;
   height: 2px;
-  background-color: var(--text-primary);
+  background-color: var(--color-accent);
   border-radius: 2px;
   transform: translateX(-50%) scaleX(0);
   transform-origin: center;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease;
+  box-shadow: 0 0 8px var(--color-accent);
 }
 
 .nav-link.active::after,
