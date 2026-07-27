@@ -28,20 +28,6 @@
         </ul>
 
         <div class="nav-actions">
-          <button 
-            @click="toggleTheme" 
-            class="theme-toggle-btn interactive" 
-            :title="`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Studio Mode`"
-          >
-            <svg v-if="theme === 'light'" class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-            </svg>
-            <svg v-else class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="4"/>
-              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-            </svg>
-          </button>
-
           <a href="#contact" class="btn-proposal-pill interactive">
             Get Proposal
           </a>
@@ -229,22 +215,8 @@ import PortfolioGrid from './components/PortfolioGrid.vue'
 import UmkmImpact from './components/UmkmImpact.vue'
 
 // Theme Management (Light Studio vs Dark Glass Mode)
-const theme = ref<'light' | 'dark'>('light')
-
 const initTheme = () => {
-  const saved = localStorage.getItem('kele-theme')
-  if (saved === 'dark' || saved === 'light') {
-    theme.value = saved
-  } else {
-    theme.value = 'light'
-  }
-  document.documentElement.setAttribute('data-theme', theme.value)
-}
-
-const toggleTheme = () => {
-  theme.value = theme.value === 'light' ? 'dark' : 'light'
-  localStorage.setItem('kele-theme', theme.value)
-  document.documentElement.setAttribute('data-theme', theme.value)
+  document.documentElement.setAttribute('data-theme', 'dark')
 }
 
 // Structuring each top rotating phrase into 2 clean lines
