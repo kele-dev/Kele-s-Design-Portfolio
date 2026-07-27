@@ -299,35 +299,37 @@ const prevSlide = () => {
 .filter-wrapper {
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   margin-bottom: 48px;
   flex-wrap: wrap;
 }
 
 .filter-btn {
   background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  color: var(--color-text-muted);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
   padding: 10px 24px;
-  border-radius: 50px;
-  font-weight: 600;
-  font-size: 0.9rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
   transition: var(--transition-smooth);
   position: relative;
   overflow: visible;
+  cursor: pointer;
 }
 
 .filter-btn:hover {
-  color: var(--color-text-main);
-  border-color: var(--border-color-hover);
+  color: var(--text-primary);
+  border-color: var(--border-glass);
   background: var(--bg-card-hover);
 }
 
 .filter-btn.active {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: #ffffff;
-  box-shadow: 0 4px 15px rgba(0, 102, 226, 0.3);
+  background: var(--pill-cta-bg);
+  border-color: var(--pill-cta-bg);
+  color: var(--pill-cta-text);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
 .active-dot {
@@ -335,9 +337,9 @@ const prevSlide = () => {
   bottom: -6px;
   left: 50%;
   transform: translateX(-50%);
-  width: 6px;
-  height: 6px;
-  background-color: var(--color-accent);
+  width: 5px;
+  height: 5px;
+  background-color: var(--text-primary);
   border-radius: 50%;
 }
 
@@ -349,9 +351,19 @@ const prevSlide = () => {
 }
 
 .project-card {
+  border-radius: 24px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.3s ease;
+}
+
+.project-card:hover {
+  border-color: var(--border-glass);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
 }
 
 .project-image-wrapper {
@@ -359,14 +371,14 @@ const prevSlide = () => {
   width: 100%;
   aspect-ratio: 16 / 10;
   overflow: hidden;
-  background: #0d162e;
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .project-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .project-card:hover .project-image {
@@ -377,17 +389,15 @@ const prevSlide = () => {
   position: absolute;
   top: 16px;
   left: 16px;
-  background: rgba(8, 13, 26, 0.85);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--color-accent);
-  color: var(--color-accent);
+  background: var(--pill-cta-bg);
+  color: var(--pill-cta-text);
   padding: 6px 14px;
-  border-radius: 50px;
-  font-size: 0.8rem;
-  font-weight: 700;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
   z-index: 5;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
 }
 
 .project-overlay {
@@ -396,12 +406,12 @@ const prevSlide = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(8, 13, 26, 0.7);
+  background: rgba(0, 0, 0, 0.45);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: var(--transition-smooth);
+  transition: opacity 0.35s ease;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 }
@@ -411,18 +421,19 @@ const prevSlide = () => {
 }
 
 .view-pill {
-  background: #ffffff;
-  color: var(--color-text-dark);
-  padding: 10px 20px;
-  border-radius: 50px;
+  background: var(--pill-cta-bg);
+  color: var(--pill-cta-text);
+  padding: 10px 22px;
+  border-radius: 9999px;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
   display: flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  transform: translateY(15px);
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  transform: translateY(12px);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .project-card:hover .view-pill {
@@ -430,7 +441,7 @@ const prevSlide = () => {
 }
 
 .project-info {
-  padding: 24px;
+  padding: 28px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -441,43 +452,40 @@ const prevSlide = () => {
   justify-content: space-between;
   align-items: center;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   flex-wrap: wrap;
 }
 
 .project-category {
-  color: var(--color-accent);
-  font-weight: 700;
-  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 800;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.12em;
 }
 
 .project-formats-tag {
-  color: var(--color-text-muted);
+  color: var(--text-muted);
   font-size: 0.75rem;
-  font-weight: 500;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 3px 10px;
-  border-radius: 50px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-weight: 600;
+  background: var(--border-subtle);
+  padding: 4px 12px;
+  border-radius: 9999px;
 }
 
 .project-title {
-  font-size: 1.4rem;
-  font-weight: 700;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   margin-bottom: 10px;
-  transition: var(--transition-smooth);
-}
-
-.project-card:hover .project-title {
-  color: var(--color-accent);
+  color: var(--text-primary);
+  transition: color 0.3s ease;
 }
 
 .project-desc {
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
   font-size: 0.95rem;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 /* TransitionGroup Animations for Grid Items */

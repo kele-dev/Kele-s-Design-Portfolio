@@ -3,11 +3,27 @@
     <div class="container">
       <div class="umkm-card glass-panel" v-motion-slide-visible-once-bottom>
         <div class="umkm-header">
-          <span class="category-pill gold-pill">🌱 Empowering Local Business</span>
+          <span class="category-pill">🌱 Empowering Local Business</span>
           <h2 class="umkm-title text-gradient">Mendorong Pertumbuhan UMKM Melalui Desain Berdampak</h2>
           <p class="umkm-desc">
-            Saya percaya bahwa usaha lokal dan UMKM berhak memiliki identitas visual sekelas brand nasional/global. Kele Design siap mendampingi perjalanan usaha Anda dari nol hingga menjadi brand yang berdaya saing tinggi.
+            Saya percaya bahwa usaha lokal dan UMKM berhak memiliki identitas visual sekelas brand nasional/global. Kele Design Studio siap mendampingi perjalanan usaha Anda dari nol hingga menjadi brand yang berdaya saing tinggi.
           </p>
+        </div>
+
+        <!-- Metric Stat Counters (Visual Identity Studio Style) -->
+        <div class="metrics-row">
+          <div class="metric-card glass-panel">
+            <span class="metric-number">81%</span>
+            <span class="metric-label">Konsumen harus memercayai karakter visual brand sebelum melakukan pembelian</span>
+          </div>
+          <div class="metric-card glass-panel">
+            <span class="metric-number">55%</span>
+            <span class="metric-label">Kesan pertama pembeli terbentuk secara instan dari identitas desain</span>
+          </div>
+          <div class="metric-card glass-panel">
+            <span class="metric-number">12+</span>
+            <span class="metric-label">Mitra UMKM lokal telah terbantu menaikkan nilai jual & daya saing</span>
+          </div>
         </div>
 
         <div class="pillars-grid">
@@ -50,7 +66,7 @@ const pillars = ref([
     title: 'Visual Identity Upgrade',
     desc: 'Mentransformasi logo dan tampilan visual usaha lokal yang sederhana menjadi identitas brand yang profesional, konsisten, dan mudah diingat konsumen.',
     tag: 'Logo & Brand System',
-    bg: 'rgba(0, 102, 226, 0.15)',
+    bg: 'rgba(0, 102, 226, 0.12)',
     color: '#0066e2'
   },
   {
@@ -59,7 +75,7 @@ const pillars = ref([
     title: 'Packaging & Merchandise',
     desc: 'Mendesain kemasan produk retail, stiker kemasan, poster menu, dan merchandise cetak (kaos, mug) yang meningkatkan daya saing di pasaran.',
     tag: 'Print & Product Collateral',
-    bg: 'rgba(255, 210, 0, 0.15)',
+    bg: 'rgba(255, 210, 0, 0.12)',
     color: '#ffd200'
   },
   {
@@ -68,7 +84,7 @@ const pillars = ref([
     title: 'Digital & Web Presence',
     desc: 'Menyusun materi feed sosial media promo dan antarmuka website sederhana yang menarik calon pembeli dan meningkatkan kepercayaan.',
     tag: 'Social Feed & Landing Page',
-    bg: 'rgba(0, 204, 153, 0.15)',
+    bg: 'rgba(0, 204, 153, 0.12)',
     color: '#00cc99'
   }
 ])
@@ -80,18 +96,14 @@ const pillars = ref([
   border-radius: 28px;
   position: relative;
   overflow: hidden;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
 }
 
 .umkm-header {
   text-align: center;
   max-width: 750px;
-  margin: 0 auto 56px;
-}
-
-.gold-pill {
-  background: rgba(255, 210, 0, 0.1);
-  color: var(--color-accent);
-  border-color: rgba(255, 210, 0, 0.25);
+  margin: 0 auto 48px;
 }
 
 .umkm-title {
@@ -101,18 +113,58 @@ const pillars = ref([
   line-height: 1.2;
   margin-top: 16px;
   margin-bottom: 16px;
+  color: var(--text-primary);
 }
 
 .umkm-desc {
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
   font-size: 1.1rem;
   line-height: 1.6;
+}
+
+/* Metrics Row */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.metric-card {
+  padding: 28px 24px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  transition: transform 0.3s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-glass);
+}
+
+.metric-number {
+  font-size: 3.2rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.metric-label {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  font-weight: 500;
 }
 
 .pillars-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
+  gap: 24px;
   margin-bottom: 48px;
 }
 
@@ -122,6 +174,8 @@ const pillars = ref([
   display: flex;
   flex-direction: column;
   height: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
 }
 
 .pillar-icon {
@@ -136,14 +190,14 @@ const pillars = ref([
 }
 
 .pillar-title {
-  font-size: 1.3rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 800;
   margin-bottom: 12px;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .pillar-desc {
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
   font-size: 0.95rem;
   line-height: 1.6;
   flex-grow: 1;
@@ -151,11 +205,11 @@ const pillars = ref([
 }
 
 .pillar-tag {
-  color: var(--color-accent);
-  font-size: 0.8rem;
-  font-weight: 700;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.1em;
 }
 
 .umkm-cta-row {
@@ -163,7 +217,7 @@ const pillars = ref([
   justify-content: space-between;
   align-items: center;
   padding-top: 32px;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--border-subtle);
   flex-wrap: wrap;
   gap: 20px;
 }
@@ -172,7 +226,7 @@ const pillars = ref([
   display: flex;
   align-items: center;
   gap: 10px;
-  color: var(--color-text-muted);
+  color: var(--text-secondary);
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -180,7 +234,7 @@ const pillars = ref([
 .pulse-dot {
   width: 10px;
   height: 10px;
-  background: var(--color-accent);
+  background: var(--text-primary);
   border-radius: 50%;
   animation: pulse-ring 2s infinite ease-in-out;
 }
@@ -192,7 +246,7 @@ const pillars = ref([
 }
 
 @media (max-width: 900px) {
-  .pillars-grid {
+  .metrics-row, .pillars-grid {
     grid-template-columns: 1fr;
   }
   .umkm-card {

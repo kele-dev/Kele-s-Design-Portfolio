@@ -1,41 +1,52 @@
 <template>
-  <div :style="themeStyles">
+  <div class="app-root">
+    <!-- Studio Preloader -->
+    <StudioPreloader />
+
+    <!-- Fixed Vertical Side Badge -->
+    <SideBadge />
+
     <!-- Creative Animated Background Layer -->
     <CreativeBackground />
 
     <!-- Custom Cursor -->
     <CustomCursor />
 
-    <!-- Navigation Header -->
-    <header class="header-nav" :class="{ 'scrolled': isScrolled }">
-      <div class="container nav-container">
-        <KeleLogo />
-        
-        <nav class="nav-links-wrapper">
-          <ul class="nav-links">
-            <li><a href="#hero" class="nav-link interactive" :class="{ 'active': activeSection === 'hero' }">Home</a></li>
-            <li><a href="#works" class="nav-link interactive" :class="{ 'active': activeSection === 'works' }">Works</a></li>
-            <li><a href="#about" class="nav-link interactive" :class="{ 'active': activeSection === 'about' }">About</a></li>
-            <li><a href="#umkm-impact" class="nav-link interactive" :class="{ 'active': activeSection === 'umkm-impact' }">UMKM</a></li>
-            <li><a href="#contact" class="nav-link interactive" :class="{ 'active': activeSection === 'contact' }">Contact</a></li>
-          </ul>
-        </nav>
+    <!-- Floating Glassmorphic Header Navigation -->
+    <header class="floating-header-wrapper" :class="{ 'scrolled': isScrolled }">
+      <nav class="floating-navbar">
+        <div class="nav-brand">
+          <KeleLogo />
+        </div>
 
-        <div class="header-actions">
-          <!-- Theme Picker Button -->
+        <ul class="nav-links">
+          <li><a href="#hero" class="nav-link interactive" :class="{ 'active': activeSection === 'hero' }">Home</a></li>
+          <li><a href="#works" class="nav-link interactive" :class="{ 'active': activeSection === 'works' }">Projects</a></li>
+          <li><a href="#about" class="nav-link interactive" :class="{ 'active': activeSection === 'about' }">About</a></li>
+          <li><a href="#umkm-impact" class="nav-link interactive" :class="{ 'active': activeSection === 'umkm-impact' }">Impact</a></li>
+          <li><a href="#contact" class="nav-link interactive" :class="{ 'active': activeSection === 'contact' }">Contact</a></li>
+        </ul>
+
+        <div class="nav-actions">
           <button 
-            @click="cycleTheme" 
+            @click="toggleTheme" 
             class="theme-toggle-btn interactive" 
-            title="Ubah Warna Tema"
+            :title="`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Studio Mode`"
           >
-            <div class="theme-icon-semicircle" :style="{ transform: `rotate(${themeAngle}deg)` }"></div>
+            <svg v-if="theme === 'light'" class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+            </svg>
+            <svg v-else class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+            </svg>
           </button>
-          
-          <a href="mailto:kele.designid@gmail.com" class="btn-email interactive">
-            kele.designid@gmail.com
+
+          <a href="#contact" class="btn-proposal-pill interactive">
+            Get Proposal
           </a>
         </div>
-      </div>
+      </nav>
     </header>
 
     <!-- Hero Section -->
@@ -44,11 +55,11 @@
         <div class="hero-content" v-motion-fade>
           <div class="hero-badge-wrapper">
             <div class="hero-badge">
-              <span>design</span>
+              <span>DESIGN STUDIO</span>
               <div class="badge-semicircle"></div>
-              <span>branding</span>
+              <span>BRANDING</span>
               <div class="badge-semicircle"></div>
-              <span>ui/ux</span>
+              <span>VISUAL SUITE</span>
             </div>
           </div>
           
@@ -65,15 +76,15 @@
           </h1>
           
           <p class="hero-desc">
-            Halo! Saya <span class="highlight-name interactive">Bagus Hari Wijaya</span>, kreator di balik <strong>kele design</strong>. Menghasilkan sistem identitas merek, desain website, dan materi visual promosi yang fungsional secara profesional namun tetap berjiwa playful.
+            Halo! Saya <span class="highlight-name interactive">Bagus Hari Wijaya</span>, desainer di balik <strong>kele design studio</strong>. Menghasilkan sistem identitas merek, desain website, dan materi visual promosi yang fungsional berestetika tinggi ala studio agensi profesional.
           </p>
           
           <div class="hero-buttons">
             <a href="#works" class="btn-primary interactive">
-              Lihat Karya
+              Explore Projects
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m19 9-7 7-7-7"/></svg>
             </a>
-            <a href="#about" class="btn-outline interactive">Tentang Saya</a>
+            <a href="#about" class="btn-outline interactive">About Studio</a>
           </div>
         </div>
       </div>
@@ -113,10 +124,10 @@
             <h2 class="about-title text-gradient">Siapa di Balik Kele Design?</h2>
             
             <p class="about-p">
-              Saya adalah seorang desainer grafis & merek independen yang berbasis di Jakarta. Berfokus pada pengembangan sistem identitas brand (logo hingga merchandise), desain website digital (UI/UX), dan pendampingan visual usaha lokal (UMKM).
+              Saya adalah seorang desainer grafis & merek independen berbasis di Jakarta. Berfokus pada pengembangan sistem identitas brand (logo hingga merchandise), desain website digital (UI/UX), dan pendampingan visual usaha lokal (UMKM).
             </p>
             <p class="about-p">
-              Bagi saya, desain bukan hanya tentang menyusun tata letak yang rapi, melainkan juga tentang menceritakan sebuah kisah dengan cara yang menyenangkan. Saya selalu menyisipkan sentuhan playful yang tak terduga ke dalam karya-karya profesional saya agar menghasilkan karya yang unik dan memorable.
+              Bagi saya, desain bukan hanya tentang menyusun tata letak yang rapi, melainkan juga tentang menceritakan sebuah kisah dengan cara yang menyenangkan. Saya menyisipkan sentuhan playful khas studio ke dalam karya-karya profesional agar menghasilkan impresi visual yang kuat.
             </p>
             
             <div class="skills-wrapper">
@@ -195,7 +206,7 @@
       <div class="container footer-container">
         <div class="footer-left">
           <span class="footer-logo">kele.</span>
-          <p>© 2026 kele design. Dibuat dengan Vue 3 & Motion.</p>
+          <p>© 2026 kele design studio. Dibuat dengan Vue 3 & Motion.</p>
         </div>
         <div class="footer-right">
           <p>Tahun Berdiri: <strong>2023</strong></p>
@@ -206,7 +217,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import StudioPreloader from './components/StudioPreloader.vue'
+import SideBadge from './components/SideBadge.vue'
 import CreativeBackground from './components/CreativeBackground.vue'
 import KeleLogo from './components/KeleLogo.vue'
 import CustomCursor from './components/CustomCursor.vue'
@@ -214,6 +227,25 @@ import InteractiveStickers from './components/InteractiveStickers.vue'
 import LogoMarquee from './components/LogoMarquee.vue'
 import PortfolioGrid from './components/PortfolioGrid.vue'
 import UmkmImpact from './components/UmkmImpact.vue'
+
+// Theme Management (Light Studio vs Dark Glass Mode)
+const theme = ref<'light' | 'dark'>('light')
+
+const initTheme = () => {
+  const saved = localStorage.getItem('kele-theme')
+  if (saved === 'dark' || saved === 'light') {
+    theme.value = saved
+  } else {
+    theme.value = 'light'
+  }
+  document.documentElement.setAttribute('data-theme', theme.value)
+}
+
+const toggleTheme = () => {
+  theme.value = theme.value === 'light' ? 'dark' : 'light'
+  localStorage.setItem('kele-theme', theme.value)
+  document.documentElement.setAttribute('data-theme', theme.value)
+}
 
 // Structuring each top rotating phrase into 2 clean lines
 interface HeadlinePhrase {
@@ -259,10 +291,10 @@ const isScrolled = ref(false)
 const activeSection = ref('hero')
 
 const handleScroll = () => {
-  isScrolled.value = window.scrollY > 50
+  isScrolled.value = window.scrollY > 30
   
   const sections = ['hero', 'works', 'about', 'umkm-impact', 'contact']
-  const scrollPos = window.scrollY + 120
+  const scrollPos = window.scrollY + 140
   
   for (const section of sections) {
     const el = document.getElementById(section)
@@ -277,6 +309,7 @@ const handleScroll = () => {
 }
 
 onMounted(() => {
+  initTheme()
   window.addEventListener('scroll', handleScroll)
   
   // Rotate headline every 3.2 seconds
@@ -289,59 +322,158 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
   if (headlineTimer) clearInterval(headlineTimer)
 })
-
-// Playful theme cycling logic
-interface Theme {
-  primary: string
-  primaryRgb: string
-  accent: string
-  accentRgb: string
-}
-
-const themes: Theme[] = [
-  {
-    primary: '#0066e2',
-    primaryRgb: '0, 102, 226',
-    accent: '#ffd200',
-    accentRgb: '255, 210, 0'
-  },
-  {
-    primary: '#8a2be2', // Purple
-    primaryRgb: '138, 43, 226',
-    accent: '#39ff14', // Neon green
-    accentRgb: '57, 255, 20'
-  },
-  {
-    primary: '#ff5e00', // Orange
-    primaryRgb: '255, 94, 0',
-    accent: '#00e5ff', // Neon cyan
-    accentRgb: '0, 229, 255'
-  }
-]
-
-const currentThemeIndex = ref(0)
-const themeAngle = ref(0)
-
-const themeStyles = computed(() => {
-  const theme = themes[currentThemeIndex.value]
-  return {
-    '--color-primary': theme.primary,
-    '--color-primary-rgb': theme.primaryRgb,
-    '--color-accent': theme.accent,
-    '--color-accent-rgb': theme.accentRgb
-  }
-})
-
-const cycleTheme = () => {
-  currentThemeIndex.value = (currentThemeIndex.value + 1) % themes.length
-  themeAngle.value += 120
-}
 </script>
 
 <style>
 #app {
   width: 100%;
   min-height: 100vh;
+}
+
+/* Floating Glass Navbar Wrapper */
+.floating-header-wrapper {
+  position: fixed;
+  top: 1.25rem;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  padding: 0 1.25rem;
+  pointer-events: none;
+  transition: transform 0.4s ease;
+}
+
+.floating-navbar {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1060px;
+  padding: 0.6rem 1.25rem;
+  background: var(--bg-glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-glass);
+  border-radius: 9999px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.floating-header-wrapper.scrolled .floating-navbar {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.14);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: color 0.25s ease;
+  position: relative;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--text-primary);
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--text-primary);
+  border-radius: 2px;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--border-subtle);
+  transform: scale(1.08);
+}
+
+.theme-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.btn-proposal-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1.25rem;
+  border-radius: 9999px;
+  background-color: var(--pill-cta-bg);
+  color: var(--pill-cta-text);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+.btn-proposal-pill:hover {
+  transform: translateY(-2px);
+  opacity: 0.92;
+}
+
+/* Category Pill Utility */
+.category-pill {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+/* Mobile Responsiveness for Header */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+  .floating-navbar {
+    padding: 0.5rem 0.9rem;
+  }
 }
 
 /* Dynamic Headline Slide Animation */

@@ -140,7 +140,7 @@
   position: absolute;
   font-family: monospace;
   font-size: 1.5rem;
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--border-glass);
   line-height: 1;
 }
 
@@ -156,7 +156,7 @@
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.25);
+  color: var(--text-muted);
   display: flex;
   align-items: center;
   gap: 8px;
