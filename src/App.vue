@@ -1,5 +1,5 @@
 <template>
-  <div class="app-root">
+  <div class="app-root" :style="themeStyles">
     <!-- Studio Preloader -->
     <StudioPreloader />
 
@@ -28,6 +28,14 @@
         </ul>
 
         <div class="nav-actions">
+          <button 
+            @click="cycleTheme" 
+            class="theme-toggle-btn interactive" 
+            title="Ubah Warna Aksen Tema"
+          >
+            <div class="theme-icon-semicircle" :style="{ transform: `rotate(${themeAngle}deg)` }"></div>
+          </button>
+
           <a href="#contact" class="btn-proposal-pill interactive">
             Get Proposal
           </a>
@@ -203,7 +211,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 import StudioPreloader from './components/StudioPreloader.vue'
 import SideBadge from './components/SideBadge.vue'
 import CreativeBackground from './components/CreativeBackground.vue'
@@ -214,7 +222,59 @@ import LogoMarquee from './components/LogoMarquee.vue'
 import PortfolioGrid from './components/PortfolioGrid.vue'
 import UmkmImpact from './components/UmkmImpact.vue'
 
-// Theme Management (Light Studio vs Dark Glass Mode)
+// Playful Accent Color Theme Cycling Logic
+interface Theme {
+  primary: string
+  primaryRgb: string
+  accent: string
+  accentRgb: string
+}
+
+const themes: Theme[] = [
+  {
+    primary: '#0066e2',
+    primaryRgb: '0, 102, 226',
+    accent: '#ffd200',
+    accentRgb: '255, 210, 0'
+  },
+  {
+    primary: '#8a2be2', // Neon Purple
+    primaryRgb: '138, 43, 226',
+    accent: '#39ff14', // Neon Green
+    accentRgb: '57, 255, 20'
+  },
+  {
+    primary: '#ff5e00', // Vivid Orange
+    primaryRgb: '255, 94, 0',
+    accent: '#00e5ff', // Neon Cyan
+    accentRgb: '0, 229, 255'
+  },
+  {
+    primary: '#ff007f', // Electric Pink
+    primaryRgb: '255, 0, 127',
+    accent: '#00f6ff', // Electric Cyan
+    accentRgb: '0, 246, 255'
+  }
+]
+
+const currentThemeIndex = ref(0)
+const themeAngle = ref(0)
+
+const themeStyles = computed(() => {
+  const theme = themes[currentThemeIndex.value]
+  return {
+    '--color-primary': theme.primary,
+    '--color-primary-rgb': theme.primaryRgb,
+    '--color-accent': theme.accent,
+    '--color-accent-rgb': theme.accentRgb
+  }
+})
+
+const cycleTheme = () => {
+  currentThemeIndex.value = (currentThemeIndex.value + 1) % themes.length
+  themeAngle.value += 120
+}
+
 const initTheme = () => {
   document.documentElement.setAttribute('data-theme', 'dark')
 }
@@ -398,24 +458,26 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  border: 1px solid var(--border-subtle);
-  background: transparent;
-  color: var(--text-primary);
+  border: 1px solid var(--border-glass);
+  background: var(--border-subtle);
   cursor: pointer;
-  transition: background-color 0.25s ease, transform 0.25s ease;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
 }
 
 .theme-toggle-btn:hover {
-  background: var(--border-subtle);
-  transform: scale(1.08);
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.1);
 }
 
-.theme-icon {
-  width: 20px;
-  height: 20px;
+.theme-icon-semicircle {
+  width: 16px;
+  height: 8px;
+  background: var(--color-accent);
+  border-radius: 16px 16px 0 0;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
 }
 
 .btn-proposal-pill {
