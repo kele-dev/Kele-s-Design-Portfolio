@@ -1,7 +1,9 @@
 <template>
-  <div class="side-badge-fixed" aria-hidden="true">
+  <!-- Decorative, but it wraps a real link: aria-hidden here would hide it from
+       screen readers while Tab still focused it. Kept exposed instead. -->
+  <div class="side-badge-fixed">
     <a href="#works" class="badge-link interactive">
-      <span class="badge-accent"></span>
+      <span class="badge-accent" aria-hidden="true"></span>
       <span class="badge-text">KELE DESIGN STUDIO • VISUAL IDENTITY 2026</span>
     </a>
   </div>

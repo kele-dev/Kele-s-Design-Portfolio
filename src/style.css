@@ -29,6 +29,9 @@
   --pill-cta-bg: #FFFFFF;
   --pill-cta-text: #0A0A0C;
   --glass-blur: blur(16px);
+  /* Consumed by .floating-navbar in App.vue. Was referenced but never declared,
+     which left the floating header with no translucent fill at all. */
+  --bg-glass: rgba(18, 18, 22, 0.72);
 
   /* Transitions */
   --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -52,10 +55,23 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Desktop-only custom cursor hiding */
-@media (min-width: 769px) {
+/* Desktop-only custom cursor hiding.
+   Gated on a fine pointer (real mouse) and on the user not having asked for
+   reduced motion — otherwise touch/stylus users and people who rely on the
+   system cursor lose it entirely. */
+@media (min-width: 769px) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   *, *::before, *::after {
     cursor: none !important;
+  }
+}
+
+/* Respect reduced-motion: strip the ambient orbit/float/marquee animations. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -109,14 +125,16 @@ html, body {
               border-color 0.3s, background-color 0.3s;
 }
 
-/* Hover active state for cursor */
-.custom-cursor-hovering .custom-cursor-dot {
+/* Hover active state for cursor.
+   These must be compound selectors — CustomCursor.vue puts .custom-cursor-hovering
+   on the dot/ring themselves, so the old descendant form never matched. */
+.custom-cursor-dot.custom-cursor-hovering {
   width: 6px;
   height: 6px;
   background-color: var(--text-primary);
 }
 
-.custom-cursor-hovering .custom-cursor-ring {
+.custom-cursor-ring.custom-cursor-hovering {
   width: 58px;
   height: 58px;
   border-color: var(--text-primary);
@@ -126,12 +144,14 @@ html, body {
 /* Gradients */
 .text-gradient {
   background: linear-gradient(135deg, #ffffff 40%, var(--color-text-muted) 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .text-accent-gradient {
   background: linear-gradient(135deg, #00d2ff 0%, var(--color-primary) 50%, var(--color-accent) 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -153,38 +173,6 @@ html, body {
   .section-padding {
     padding: 80px 0;
   }
-}
-
-/* Theme styles & overlays */
-.grid-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    linear-gradient(rgba(var(--color-primary-rgb), 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(var(--color-primary-rgb), 0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
-  z-index: -1;
-  pointer-events: none;
-}
-
-.glow-orb {
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(var(--color-primary-rgb), 0.12) 0%, transparent 70%);
-  filter: blur(50px);
-  pointer-events: none;
-  z-index: -1;
-}
-
-.glow-orb.yellow {
-  background: radial-gradient(circle, rgba(var(--color-accent-rgb), 0.08) 0%, transparent 70%);
-  width: 400px;
-  height: 400px;
 }
 
 /* Glassmorphism panel helper */
@@ -250,62 +238,12 @@ html, body {
   background: rgba(var(--color-accent-rgb), 0.05);
   transform: translateY(-2px);
 }
-/* Theme Picker Button Utility */
-.theme-toggle-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border-color);
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition-bounce);
-}
-
-/* Theme Picker */
-.theme-toggle-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border-color);
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition-bounce);
-}
-
-.theme-toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--color-accent);
-  transform: scale(1.08);
-}
-
-.theme-icon-semicircle {
-  width: 18px;
-  height: 9px;
-  background: var(--color-accent);
-  border-radius: 18px 18px 0 0; /* half moon / semicircle shape */
-  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s;
-}
-
-.btn-email {
-  color: var(--color-text-main);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9rem;
-  padding: 10px 20px;
-  border-radius: 50px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-color);
-  transition: var(--transition-smooth);
-}
-
-.btn-email:hover {
-  background: rgba(var(--color-primary-rgb), 0.1);
-  border-color: var(--color-primary);
-  color: #ffffff;
+/* Visible keyboard focus. cursor:none hides the pointer on desktop, so the
+   focus ring is the only affordance keyboard users get. */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
 /* Hero Section */
@@ -337,10 +275,10 @@ html, body {
 
 /* Redesign pill badge based on logo motif */
 .hero-badge {
-  background: rgba(0, 102, 226, 0.15);
+  background: rgba(var(--color-primary-rgb), 0.15);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(0, 102, 226, 0.25);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.25);
   padding: 10px 24px;
   border-radius: 50px;
   display: inline-flex;
@@ -432,7 +370,7 @@ html, body {
   border-radius: 16px;
   overflow: hidden;
   margin-bottom: 20px;
-  background: radial-gradient(circle at center, rgba(0, 102, 226, 0.25) 0%, rgba(8, 13, 26, 0.6) 100%);
+  background: radial-gradient(circle at center, rgba(var(--color-primary-rgb), 0.25) 0%, rgba(8, 13, 26, 0.6) 100%);
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -478,7 +416,7 @@ html, body {
 
 .avatar-card:hover .user-photo {
   transform: scale(1.06) translateY(-6px);
-  filter: drop-shadow(0 20px 35px rgba(0, 102, 226, 0.5));
+  filter: drop-shadow(0 20px 35px rgba(var(--color-primary-rgb), 0.5));
 }
 
 .avatar-card-info h3 {
@@ -710,6 +648,12 @@ html, body {
   font-size: 0.85rem;
 }
 
+/* Anchored sections must clear the fixed floating header when a nav link
+   (or #hash deep link) jumps to them — otherwise titles hide behind it. */
+section[id] {
+  scroll-margin-top: 96px;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1024px) {
   .hero-title {
@@ -740,12 +684,6 @@ html, body {
 }
 
 @media (max-width: 768px) {
-  .header-nav {
-    height: 80px;
-  }
-  .btn-email {
-    display: none;
-  }
   .hero-title {
     font-size: 3.2rem;
   }

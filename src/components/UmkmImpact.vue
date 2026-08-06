@@ -57,37 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-
-const pillars = ref([
-  {
-    id: 1,
-    icon: '🎯',
-    title: 'Visual Identity Upgrade',
-    desc: 'Mentransformasi logo dan tampilan visual usaha lokal yang sederhana menjadi identitas brand yang profesional, konsisten, dan mudah diingat konsumen.',
-    tag: 'Logo & Brand System',
-    bg: 'rgba(0, 102, 226, 0.12)',
-    color: '#0066e2'
-  },
-  {
-    id: 2,
-    icon: '📦',
-    title: 'Packaging & Merchandise',
-    desc: 'Mendesain kemasan produk retail, stiker kemasan, poster menu, dan merchandise cetak (kaos, mug) yang meningkatkan daya saing di pasaran.',
-    tag: 'Print & Product Collateral',
-    bg: 'rgba(255, 210, 0, 0.12)',
-    color: '#ffd200'
-  },
-  {
-    id: 3,
-    icon: '🌐',
-    title: 'Digital & Web Presence',
-    desc: 'Menyusun materi feed sosial media promo dan antarmuka website sederhana yang menarik calon pembeli dan meningkatkan kepercayaan.',
-    tag: 'Social Feed & Landing Page',
-    bg: 'rgba(0, 204, 153, 0.12)',
-    color: '#00cc99'
-  }
-])
+import { pillars } from '../content'
 </script>
 
 <style scoped>

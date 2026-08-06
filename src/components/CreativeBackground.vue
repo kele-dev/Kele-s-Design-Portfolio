@@ -62,7 +62,7 @@
   width: 100%;
   height: 100%;
   background-image: 
-    radial-gradient(rgba(0, 102, 226, 0.15) 1px, transparent 1px),
+    radial-gradient(rgba(var(--color-primary-rgb), 0.15) 1px, transparent 1px),
     linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
   background-size: 40px 40px, 80px 80px, 80px 80px;
@@ -168,17 +168,7 @@
   box-shadow: 0 0 8px var(--color-accent);
 }
 
-.anno-badge {
-  background: rgba(0, 102, 226, 0.2);
-  border: 1px solid rgba(0, 102, 226, 0.4);
-  color: var(--color-primary);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.65rem;
-}
-
 .annotation-1 { top: 140px; left: 40px; }
-.annotation-2 { bottom: 120px; right: 40px; }
 .annotation-3 { top: 50%; left: 20px; transform: rotate(-90deg); transform-origin: left center; }
 
 /* Floating Vector Shapes */
@@ -195,7 +185,7 @@
   border-radius: 0 140px 140px 0; /* Kele yellow semicircle */
   top: 25%;
   left: 8%;
-  filter: drop-shadow(0 0 15px rgba(255, 210, 0, 0.3));
+  filter: drop-shadow(0 0 15px rgba(var(--color-accent-rgb), 0.3));
   animation: rotate-float 35s infinite linear;
 }
 
@@ -232,6 +222,14 @@
   to { transform: rotate(360deg) translateY(20px); }
 }
 
+/* .floating-vector references this; the keyframes were missing, so .shape-dots
+   (the only element relying on the base animation) sat completely static. */
+@keyframes shape-drift {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(-18px, -24px); }
+  100% { transform: translate(0, 0); }
+}
+
 @keyframes pulse-float {
   0% { transform: scale(1) rotate(0deg); opacity: 0.2; }
   100% { transform: scale(1.3) rotate(45deg); opacity: 0.5; }
@@ -240,6 +238,17 @@
 @media (max-width: 768px) {
   .design-annotation, .shape-semicircle, .shape-ring {
     display: none; /* Keep mobile view clean */
+  }
+
+  /* The blur(80px) orbs are the heaviest paint on the page; drop two of the
+     four and soften the rest on phones to spare low-end GPUs. */
+  .orb-magenta, .orb-cyan {
+    display: none;
+  }
+
+  .glow-orb {
+    filter: blur(60px);
+    opacity: 0.18;
   }
 }
 </style>

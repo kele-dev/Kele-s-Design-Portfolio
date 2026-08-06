@@ -39,9 +39,42 @@
           <a href="#contact" class="btn-proposal-pill interactive">
             Get Proposal
           </a>
+
+          <!-- Mobile hamburger: nav links are hidden below 768px, so this is the
+               only way phone visitors can jump between sections. -->
+          <button 
+            class="mobile-menu-btn interactive" 
+            :aria-expanded="mobileMenuOpen ? 'true' : 'false'"
+            aria-label="Buka menu navigasi"
+            @click="toggleMobileMenu"
+          >
+            <svg v-if="!mobileMenuOpen" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
         </div>
       </nav>
     </header>
+
+    <!-- Mobile Full-Screen Menu Overlay -->
+    <Transition name="mobile-menu">
+      <div v-if="mobileMenuOpen" class="mobile-menu-overlay">
+        <nav class="mobile-menu-nav">
+          <a 
+            v-for="link in mobileLinks" 
+            :key="link.id"
+            :href="`#${link.id}`" 
+            class="mobile-nav-link interactive"
+            :class="{ 'active': activeSection === link.id }"
+            @click="closeMobileMenu"
+          >
+            {{ link.label }}
+          </a>
+          <a href="#contact" class="btn-proposal-pill interactive mobile-menu-cta" @click="closeMobileMenu">
+            Get Proposal
+          </a>
+        </nav>
+      </div>
+    </Transition>
 
     <!-- Hero Section -->
     <section class="hero-section" id="hero">
@@ -103,7 +136,7 @@
               <div class="avatar-photo-wrapper">
                 <div class="photo-backdrop-circle"></div>
                 <div class="photo-backdrop-semicircle"></div>
-                <img src="/assets/bagus_photo.png" alt="Bagus Hari Wijaya — kele design" class="user-photo" />
+                <img src="/assets/bagus_photo.png" alt="Bagus Hari Wijaya — kele design" class="user-photo" loading="lazy" decoding="async" />
               </div>
               <div class="avatar-card-info">
                 <h3>Bagus Hari Wijaya</h3>
@@ -162,15 +195,18 @@
               </div>
               <div class="contact-item">
                 <span class="item-label">Media Sosial</span>
+                <!-- TODO: ganti dengan profil asli Bagus di masing-masing platform -->
                 <div class="social-links">
-                  <a href="#" class="social-link interactive">Instagram</a>
-                  <a href="#" class="social-link interactive">Dribbble</a>
-                  <a href="#" class="social-link interactive">Behance</a>
-                  <a href="#" class="social-link interactive">LinkedIn</a>
+                  <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" class="social-link interactive">Instagram</a>
+                  <a href="https://dribbble.com/" target="_blank" rel="noopener noreferrer" class="social-link interactive">Dribbble</a>
+                  <a href="https://www.behance.net/" target="_blank" rel="noopener noreferrer" class="social-link interactive">Behance</a>
+                  <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" class="social-link interactive">LinkedIn</a>
                 </div>
               </div>
             </div>
             
+            <!-- The form composes a mailto: link from the fields so submissions
+                 genuinely reach kele.designid@gmail.com without a backend. -->
             <form class="contact-form" @submit.prevent="handleSubmit">
               <div class="form-group">
                 <label for="name">Nama Anda</label>
@@ -185,8 +221,8 @@
                 <textarea id="message" v-model="form.message" required class="form-input interactive" rows="4" placeholder="Halo Bagus, mari buat proyek..." ></textarea>
               </div>
               
-              <button type="submit" class="btn-primary interactive btn-submit" :disabled="formSubmitting">
-                <span>{{ formSubmitting ? 'Mengirim...' : 'Kirim Pesan' }}</span>
+              <button type="submit" class="btn-primary interactive btn-submit">
+                <span>Kirim Pesan</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="send-icon"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
               </button>
             </form>
@@ -211,7 +247,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import StudioPreloader from './components/StudioPreloader.vue'
 import SideBadge from './components/SideBadge.vue'
 import CreativeBackground from './components/CreativeBackground.vue'
@@ -221,114 +257,44 @@ import InteractiveStickers from './components/InteractiveStickers.vue'
 import LogoMarquee from './components/LogoMarquee.vue'
 import PortfolioGrid from './components/PortfolioGrid.vue'
 import UmkmImpact from './components/UmkmImpact.vue'
+import { useTheme } from './composables/useTheme'
+import { headlines, skills } from './content'
 
-// Playful Accent Color Theme Cycling Logic
-interface Theme {
-  primary: string
-  primaryRgb: string
-  accent: string
-  accentRgb: string
-}
-
-const themes: Theme[] = [
-  {
-    primary: '#0066e2',
-    primaryRgb: '0, 102, 226',
-    accent: '#ffd200',
-    accentRgb: '255, 210, 0'
-  },
-  {
-    primary: '#8a2be2', // Neon Purple
-    primaryRgb: '138, 43, 226',
-    accent: '#39ff14', // Neon Green
-    accentRgb: '57, 255, 20'
-  },
-  {
-    primary: '#ff5e00', // Vivid Orange
-    primaryRgb: '255, 94, 0',
-    accent: '#00e5ff', // Neon Cyan
-    accentRgb: '0, 229, 255'
-  },
-  {
-    primary: '#ff007f', // Electric Pink
-    primaryRgb: '255, 0, 127',
-    accent: '#00f6ff', // Electric Cyan
-    accentRgb: '0, 246, 255'
-  }
-]
-
-const currentThemeIndex = ref(0)
-const themeAngle = ref(0)
-
-const themeStyles = computed(() => {
-  const theme = themes[currentThemeIndex.value]
-  return {
-    '--color-primary': theme.primary,
-    '--color-primary-rgb': theme.primaryRgb,
-    '--color-accent': theme.accent,
-    '--color-accent-rgb': theme.accentRgb
-  }
-})
-
-const cycleTheme = () => {
-  currentThemeIndex.value = (currentThemeIndex.value + 1) % themes.length
-  themeAngle.value += 120
-}
-
-const initTheme = () => {
-  document.documentElement.setAttribute('data-theme', 'dark')
-}
-
-// Structuring each top rotating phrase into 2 clean lines
-interface HeadlinePhrase {
-  line1: string
-  line2: string
-}
-
-const headlines: HeadlinePhrase[] = [
-  { line1: 'Bringing Ideas', line2: '& Impact' },
-  { line1: 'Solving Complex', line2: 'Problems' },
-  { line1: 'Elevating Local', line2: 'Brands' },
-  { line1: 'Driving Business', line2: 'Growth' },
-  { line1: 'Creating Visual', line2: 'Value' }
-]
+// Playful Accent Color Theme Cycling Logic (persisted to localStorage)
+const { themeAngle, themeStyles, cycleTheme } = useTheme()
 
 const activeHeadlineIndex = ref(0)
 let headlineTimer: number | undefined
 
-// Skills Data
-const skills = ['Full Brand Identity', 'Logo Motion Design', 'Website Design & UI/UX', 'UMKM Branding Upgrade', 'Experimental Typography', 'Packaging & Merch Design', 'Vector Illustration']
-
-// Form Submission logic
+// Form Submission: compose a mailto: with the filled fields
 const form = reactive({
   name: '',
   email: '',
   message: ''
 })
-const formSubmitting = ref(false)
 
 const handleSubmit = () => {
-  formSubmitting.value = true
-  setTimeout(() => {
-    alert(`Terima kasih ${form.name}! Pesan Anda berhasil dikirim ke kele.designid@gmail.com.`)
-    form.name = ''
-    form.email = ''
-    form.message = ''
-    formSubmitting.value = false
-  }, 1000)
+  const subject = encodeURIComponent(`Proyek baru dari ${form.name}`)
+  const body = encodeURIComponent(
+    `Halo Bagus,\n\nNama: ${form.name}\nEmail: ${form.email}\n\nPesan:\n${form.message}`
+  )
+  window.location.href = `mailto:kele.designid@gmail.com?subject=${subject}&body=${body}`
 }
 
 // Scrolled Header state
 const isScrolled = ref(false)
 const activeSection = ref('hero')
 
-const handleScroll = () => {
+const SECTION_IDS = ['hero', 'works', 'about', 'umkm-impact', 'contact']
+let scrollTicking = false
+
+const measureScroll = () => {
+  scrollTicking = false
   isScrolled.value = window.scrollY > 30
-  
-  const sections = ['hero', 'works', 'about', 'umkm-impact', 'contact']
+
   const scrollPos = window.scrollY + 140
-  
-  for (const section of sections) {
+
+  for (const section of SECTION_IDS) {
     const el = document.getElementById(section)
     if (el) {
       const top = el.offsetTop
@@ -340,19 +306,83 @@ const handleScroll = () => {
   }
 }
 
-onMounted(() => {
-  initTheme()
-  window.addEventListener('scroll', handleScroll)
-  
-  // Rotate headline every 3.2 seconds
+// Coalesce to one measurement per frame. Reading offsetTop/offsetHeight forces a
+// synchronous layout, and the raw handler did that 5x on every scroll event.
+const handleScroll = () => {
+  if (scrollTicking) return
+  scrollTicking = true
+  requestAnimationFrame(measureScroll)
+}
+
+// Mobile full-screen menu
+const mobileLinks = [
+  { id: 'hero', label: 'Home' },
+  { id: 'works', label: 'Projects' },
+  { id: 'about', label: 'About' },
+  { id: 'umkm-impact', label: 'Impact' },
+  { id: 'contact', label: 'Contact' }
+]
+
+const mobileMenuOpen = ref(false)
+
+const closeMobileMenu = () => {
+  mobileMenuOpen.value = false
+  document.body.style.overflow = ''
+}
+
+const toggleMobileMenu = () => {
+  mobileMenuOpen.value = !mobileMenuOpen.value
+  // Lock page scroll while the overlay is up
+  document.body.style.overflow = mobileMenuOpen.value ? 'hidden' : ''
+}
+
+const handleMenuEscape = (e: KeyboardEvent) => {
+  if (e.key === 'Escape' && mobileMenuOpen.value) closeMobileMenu()
+}
+
+// If the viewport grows past the mobile breakpoint, the hamburger disappears
+// from the DOM via CSS — don't leave the overlay or body scroll lock behind.
+const handleMenuResize = () => {
+  if (window.innerWidth > 768 && mobileMenuOpen.value) closeMobileMenu()
+}
+
+// Rotate headline every 3.2s, but not while the tab is hidden
+const startHeadlineTimer = () => {
+  stopHeadlineTimer()
   headlineTimer = window.setInterval(() => {
     activeHeadlineIndex.value = (activeHeadlineIndex.value + 1) % headlines.length
   }, 3200)
+}
+
+const stopHeadlineTimer = () => {
+  if (headlineTimer) {
+    clearInterval(headlineTimer)
+    headlineTimer = undefined
+  }
+}
+
+const handleVisibility = () => {
+  if (document.hidden) stopHeadlineTimer()
+  else startHeadlineTimer()
+}
+
+onMounted(() => {
+  measureScroll()
+  window.addEventListener('scroll', handleScroll, { passive: true })
+  document.addEventListener('keydown', handleMenuEscape)
+  window.addEventListener('resize', handleMenuResize)
+  document.addEventListener('visibilitychange', handleVisibility)
+
+  startHeadlineTimer()
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
-  if (headlineTimer) clearInterval(headlineTimer)
+  document.removeEventListener('keydown', handleMenuEscape)
+  window.removeEventListener('resize', handleMenuResize)
+  document.removeEventListener('visibilitychange', handleVisibility)
+  stopHeadlineTimer()
+  closeMobileMenu()
 })
 </script>
 
@@ -481,6 +511,26 @@ onUnmounted(() => {
   transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
 }
 
+/* Mobile hamburger button — only visible below the desktop breakpoint */
+.mobile-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border-glass);
+  background: var(--border-subtle);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
+}
+
+.mobile-menu-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.1);
+}
+
 .btn-proposal-pill {
   display: inline-flex;
   align-items: center;
@@ -502,6 +552,63 @@ onUnmounted(() => {
   opacity: 0.92;
 }
 
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(4, 7, 15, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 24px;
+}
+
+.mobile-menu-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.mobile-nav-link {
+  width: 100%;
+  text-align: center;
+  padding: 16px 20px;
+  border-radius: 16px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.25s ease, background 0.25s ease;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link.active {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.mobile-menu-cta {
+  margin-top: 16px;
+}
+
+/* Mobile menu transition */
+.mobile-menu-enter-active,
+.mobile-menu-leave-active {
+  transition: opacity 0.35s ease;
+}
+
+.mobile-menu-enter-from,
+.mobile-menu-leave-to {
+  opacity: 0;
+}
+
 /* Category Pill Utility */
 .category-pill {
   display: inline-block;
@@ -517,6 +624,9 @@ onUnmounted(() => {
 @media (max-width: 768px) {
   .nav-links {
     display: none;
+  }
+  .mobile-menu-btn {
+    display: flex;
   }
   .floating-navbar {
     padding: 0.5rem 0.9rem;

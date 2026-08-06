@@ -28,23 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-
-interface LogoMark {
-  name: string
-  color: string
-  path: string
-  badge?: string
-}
-
-const logos = ref<LogoMark[]>([
-  { name: 'Kele Culinary', color: '#ffd200', path: 'M 14 10 A 10 10 0 0 1 14 30 Z', badge: 'F&B' },
-  { name: 'Synergy Apparel', color: '#ff3366', path: 'M 10 10 L 30 10 L 20 30 Z', badge: 'Fashion' },
-  { name: 'Galaxy Tech', color: '#00d2ff', path: 'M 20 10 L 30 20 L 20 30 L 10 20 Z', badge: 'SaaS' },
-  { name: 'Retro FMCG', color: '#00cc99', path: 'M 10 15 H 30 V 25 H 10 Z', badge: 'Retail' },
-  { name: 'Local Coffee Co', color: '#ff9900', path: 'M 15 10 A 8 8 0 0 1 25 10 L 25 25 H 15 Z', badge: 'UMKM' },
-  { name: 'Urban Studio', color: '#9933ff', path: 'M 12 12 L 28 12 L 28 28 L 12 28 Z', badge: 'Brand' }
-])
+import { logos } from '../content'
 </script>
 
 <style scoped>
@@ -82,7 +66,6 @@ const logos = ref<LogoMark[]>([
 
 .marquee-track {
   display: flex;
-  gap: 20px;
   animation: marquee-scroll 25s linear infinite;
   width: max-content;
 }
@@ -95,6 +78,9 @@ const logos = ref<LogoMark[]>([
   display: flex;
   align-items: center;
   gap: 12px;
+  /* margin (not track gap) keeps the spacing inside each item's period, so
+     the -50% loop lands exactly on the duplicate — no 1-gap seam jump. */
+  margin-right: 20px;
   padding: 12px 24px;
   border-radius: 50px;
   white-space: nowrap;
@@ -148,8 +134,8 @@ const logos = ref<LogoMark[]>([
   font-size: 0.7rem;
   font-weight: 700;
   color: var(--color-accent);
-  background: rgba(255, 210, 0, 0.1);
-  border: 1px solid rgba(255, 210, 0, 0.2);
+  background: rgba(var(--color-accent-rgb), 0.1);
+  border: 1px solid rgba(var(--color-accent-rgb), 0.2);
   padding: 2px 8px;
   border-radius: 50px;
 }

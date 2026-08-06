@@ -34,33 +34,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-
-interface Sticker {
-  id: number
-  text: string
-  x: number
-  y: number
-  rotation: number
-  zIndex: number
-  bg: string
-  color: string
-  border?: string
-  hasHalfMoon?: boolean
-  isDragging?: boolean
-}
+import { ref, onMounted, onUnmounted } from 'vue'
+import { stickers as contentStickers } from '../content'
+import type { Sticker } from '../content'
 
 const areaRef = ref<HTMLElement | null>(null)
 let topZ = 10
 
-const stickers = ref<Sticker[]>([
-  { id: 1, text: 'kele design', x: 0, y: 0, rotation: -10, zIndex: 1, bg: '#0066e2', color: '#ffffff', hasHalfMoon: true, border: '3px solid #ffffff' },
-  { id: 2, text: '💡 Ideas & Impact', x: 0, y: 0, rotation: 8, zIndex: 2, bg: '#ffd200', color: '#080d1a', border: '3px solid #ffffff' },
-  { id: 3, text: '🎨 UI/UX', x: 0, y: 0, rotation: -5, zIndex: 3, bg: '#ff3366', color: '#ffffff', border: '3px solid #ffffff' },
-  { id: 4, text: 'CMYK', x: 0, y: 0, rotation: 12, zIndex: 4, bg: '#ffffff', color: '#080d1a', border: '3px solid #0066e2' },
-  { id: 5, text: '👋 Halo, Saya Bagus', x: 0, y: 0, rotation: -15, zIndex: 5, bg: '#00cc99', color: '#ffffff', border: '3px solid #ffffff' },
-  { id: 6, text: 'Plus Jakarta Sans', x: 0, y: 0, rotation: 4, zIndex: 6, bg: 'rgba(8, 13, 26, 0.95)', color: '#ffd200', border: '1px solid rgba(255, 255, 255, 0.2)' }
-])
+// Wrap in a ref (not the raw module array): ref() deep-converts the nested
+// objects to reactive proxies, so dragging can mutate sticker.x/y/zIndex and
+// the DOM updates. A plain imported array is not reactive at all.
+const stickers = ref<Sticker[]>([...contentStickers])
 
 const arrangeStickers = () => {
   if (areaRef.value) {
@@ -93,30 +77,49 @@ onMounted(() => {
   window.addEventListener('resize', arrangeStickers)
 })
 
+// Holds the teardown for an in-flight drag so it can be cancelled on unmount.
+let releaseDrag: (() => void) | null = null
+
+onUnmounted(() => {
+  window.removeEventListener('resize', arrangeStickers)
+  releaseDrag?.()
+})
+
 const startDrag = (event: PointerEvent, sticker: Sticker) => {
   event.preventDefault()
-  
+
+  // A second pointerdown before the previous drag ended would otherwise
+  // orphan the earlier move/up listeners on window.
+  releaseDrag?.()
+
   // Bring the dragged sticker to the front
   topZ += 1
   sticker.zIndex = topZ
   sticker.isDragging = true
-  
+
   const startX = event.clientX - sticker.x
   const startY = event.clientY - sticker.y
-  
+
   const handlePointerMove = (e: PointerEvent) => {
     sticker.x = e.clientX - startX
     sticker.y = e.clientY - startY
   }
-  
-  const handlePointerUp = () => {
+
+  releaseDrag = () => {
     sticker.isDragging = false
     window.removeEventListener('pointermove', handlePointerMove)
     window.removeEventListener('pointerup', handlePointerUp)
+    window.removeEventListener('pointercancel', handlePointerUp)
+    releaseDrag = null
   }
-  
+
+  const handlePointerUp = () => releaseDrag?.()
+
   window.addEventListener('pointermove', handlePointerMove)
   window.addEventListener('pointerup', handlePointerUp)
+  // Without pointercancel the sticker stays latched to the pointer when the
+  // browser steals the gesture (touch scroll, context menu, tab switch).
+  window.addEventListener('pointercancel', handlePointerUp)
 }
 </script>
 
@@ -130,34 +133,6 @@ const startDrag = (event: PointerEvent, sticker: Sticker) => {
   pointer-events: none;
   z-index: 5;
   overflow: hidden;
-}
-
-.playground-overlay {
-  position: absolute;
-  top: 24px;
-  right: 24px;
-  pointer-events: auto;
-}
-
-.hint-pill {
-  background: rgba(13, 22, 46, 0.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 8px 16px;
-  border-radius: 50px;
-  font-size: 0.8rem;
-  color: var(--color-text-muted);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  user-select: none;
-}
-
-.spark-icon {
-  color: var(--color-accent);
-  animation: pulse 2s infinite ease-in-out;
 }
 
 .sticker-wrapper {
@@ -281,16 +256,7 @@ const startDrag = (event: PointerEvent, sticker: Sticker) => {
   margin-left: 2px;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 0.6; transform: scale(0.95); }
-  50% { opacity: 1; transform: scale(1.05); }
-}
-
 @media (max-width: 768px) {
-  .hint-pill {
-    font-size: 0.75rem;
-    padding: 6px 12px;
-  }
   .sticker {
     padding: 8px 16px;
     font-size: 0.85rem;
@@ -302,6 +268,11 @@ const startDrag = (event: PointerEvent, sticker: Sticker) => {
   }
   .bold-text {
     font-size: 0.95rem;
+  }
+  /* Stickers float over the hero text and swallow taps on small screens —
+     hide the playground entirely instead of blocking the headline. */
+  .stickers-area {
+    display: none;
   }
 }
 </style>

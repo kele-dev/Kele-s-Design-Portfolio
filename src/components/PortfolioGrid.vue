@@ -25,14 +25,19 @@
 
       <!-- Portfolio Grid with TransitionGroup for layout animations -->
       <TransitionGroup name="grid" tag="div" class="portfolio-grid">
-        <div 
-          v-for="project in filteredProjects" 
+        <div
+          v-for="project in filteredProjects"
           :key="project.id"
           class="project-card glass-panel interactive"
+          role="button"
+          tabindex="0"
+          :aria-label="`Lihat visual suite: ${project.title}`"
           @click="openProject(project)"
+          @keydown.enter.prevent="openProject(project)"
+          @keydown.space.prevent="openProject(project)"
         >
           <div class="project-image-wrapper">
-            <img :src="project.image" :alt="project.title" class="project-image" />
+            <img :src="project.image" :alt="project.title" class="project-image" loading="lazy" decoding="async" />
             
             <!-- Special Project Badge Tag -->
             <div v-if="project.badge" class="special-badge-pill">
@@ -57,11 +62,19 @@
         </div>
       </TransitionGroup>
 
-      <!-- Case Study Modal with Multi-Slide Viewer -->
+      <!-- Case Study Modal with Multi-Slide Viewer. Deep-linkable via #/case/<slug>. -->
       <Transition name="modal">
-        <div v-if="selectedProject" class="modal-overlay" @click.self="closeProject">
-          <div class="modal-content glass-panel">
-            <button class="modal-close-btn interactive" @click="closeProject">
+        <div
+          v-if="selectedProject"
+          class="modal-overlay"
+          role="dialog"
+          aria-modal="true"
+          :aria-label="selectedProject.title"
+          @click.self="closeProject"
+          @keydown.tab="trapFocus"
+        >
+          <div class="modal-content glass-panel" ref="modalRef">
+            <button ref="closeBtnRef" class="modal-close-btn interactive" aria-label="Tutup" @click="closeProject">
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
             </button>
             
@@ -72,9 +85,9 @@
                 
                 <!-- Slide Navigation Controls if project has multiple slides -->
                 <div v-if="selectedProject.slides && selectedProject.slides.length > 1" class="slide-nav-controls">
-                  <button @click="prevSlide" class="slide-btn interactive" title="Slide Sebelumnya">‹</button>
+                  <button @click="prevSlide" class="slide-btn interactive" aria-label="Slide sebelumnya" title="Slide Sebelumnya">‹</button>
                   <span class="slide-indicator">{{ activeSlideIndex + 1 }} / {{ selectedProject.slides.length }}</span>
-                  <button @click="nextSlide" class="slide-btn interactive" title="Slide Selanjutnya">›</button>
+                  <button @click="nextSlide" class="slide-btn interactive" aria-label="Slide selanjutnya" title="Slide Selanjutnya">›</button>
                 </div>
               </div>
 
@@ -124,109 +137,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-
-interface Project {
-  id: number
-  title: string
-  category: string
-  badge?: string
-  mediaFormats: string
-  shortDesc: string
-  image: string
-  slides?: string[]
-  client: string
-  year: string
-  role: string
-  challenge: string
-  solution: string
-}
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
+import { categories, projects as allProjects, type Project } from '../content'
 
 const activeCategory = ref('All')
 const selectedProject = ref<Project | null>(null)
 const activeSlideIndex = ref(0)
 
-const categories = ['All', 'Full Brand Systems', 'F&B & Retail', 'Web & Digital', 'Fashion & Corporate']
+const projects = allProjects
 
-const projects = ref<Project[]>([
-  {
-    id: 1,
-    title: 'Kele Artisan Coffee & Bakery Identity',
-    category: 'Full Brand Systems',
-    badge: '⭐ Full Identity',
-    mediaFormats: 'Logo System • Guidelines • Merchandise • Packaging',
-    shortDesc: 'Sistem identitas merek komplit dari konstruksi logo, panduan warna, hingga kaos merchandise dan stiker kemasan.',
-    image: '/assets/branding_mockup.png',
-    slides: [
-      '/assets/branding_mockup.png',
-      '/assets/illustration_mockup.png',
-      '/assets/typography_mockup.png'
-    ],
-    client: 'Kele Coffee Co. (UMKM Partner)',
-    year: '2024',
-    role: 'Lead Brand System Designer',
-    challenge: 'Usaha lokal kedai kopi & bakery membutuhkan identitas visual utuh dari logo hingga merch agar mampu bersaing dengan waralaba kopi besar.',
-    solution: 'Mendesain logogram geometris bermotif setengah lingkaran yang fleksibel diaplikasikan pada mug, kaos tim, kantong kemasan, serta stiker promo.'
-  },
-  {
-    id: 2,
-    title: 'Space Explorer SaaS Web App',
-    category: 'Web & Digital',
-    badge: '🌐 Web Design',
-    mediaFormats: 'Website Design • UI/UX • Interactive Landing Page',
-    shortDesc: 'Desain website antarmuka interaktif dan landing page promosi aplikasi dengan visualisasi data gelap imersif.',
-    image: '/assets/ui_ux_mockup.png',
-    slides: [
-      '/assets/ui_ux_mockup.png',
-      '/assets/typography_mockup.png'
-    ],
-    client: 'Galaxy Works Studio',
-    year: '2025',
-    role: 'Web UI/UX Designer',
-    challenge: 'Merancang tata letak website yang responsif dan menyajikan fitur aplikasi digital secara visual tanpa membingungkan calon pembeli.',
-    solution: 'Membangun antarmuka bertema gelap pekat dengan efek glow-orb pada navigasi dan kartu glassmorphism yang responsif di seluruh layar.'
-  },
-  {
-    id: 3,
-    title: 'Artisan Culinary & Menu Suite',
-    category: 'F&B & Retail',
-    badge: '🌱 UMKM Partner',
-    mediaFormats: 'Social Media Feed • Menu Poster • POS Display',
-    shortDesc: 'Koleksi materi promosi cetak & digital tempat makan lokal meliputi menu fisik, feed Instagram, dan banner toko.',
-    image: '/assets/illustration_mockup.png',
-    slides: [
-      '/assets/illustration_mockup.png',
-      '/assets/branding_mockup.png'
-    ],
-    client: 'Warung Kuliner Nusantara (UMKM)',
-    year: '2024',
-    role: 'F&B Visual Designer',
-    challenge: 'Meningkatkan penjualan tempat makan lokal dengan memperbaiki hirarki baca poster menu dan visual feed promo sosial media.',
-    solution: 'Menerapkan tipografi menu legibel, penataan foto hidangan unggulan yang memikat selera makan, dan layout poster promo cetak yang tajam.'
-  },
-  {
-    id: 4,
-    title: 'Urban Apparel & Streetwear Suite',
-    category: 'Fashion & Corporate',
-    badge: '⭐ Full Identity',
-    mediaFormats: 'Lookbook Feed • Merchandise • Launch Poster',
-    shortDesc: 'Desain kampanye brand pakaian street-style meliputi seri poster acara, merchandise kaos, dan lookbook sosial media.',
-    image: '/assets/typography_mockup.png',
-    slides: [
-      '/assets/typography_mockup.png',
-      '/assets/branding_mockup.png'
-    ],
-    client: 'Synergy Urban Apparel',
-    year: '2024',
-    role: 'Fashion Campaign & Merch Designer',
-    challenge: 'Membuat visual rilis produk pakaian street-style yang berani, artistik, dan mencolok di keramaian feed sosial media.',
-    solution: 'Menggabungkan tipografi distorsi geometris Plus Jakarta Sans dengan kontras warna pop-art yang tegas untuk memperkuat impresi visual.'
-  }
-])
+// Map slugs to projects so the #/case/<slug> hash resolves in O(1)
+const slugIndex = new Map(projects.map(p => [p.slug, p]))
 
 const filteredProjects = computed(() => {
-  if (activeCategory.value === 'All') return projects.value
-  return projects.value.filter(p => p.category === activeCategory.value)
+  if (activeCategory.value === 'All') return projects
+  return projects.filter(p => p.category === activeCategory.value)
 })
 
 const currentSlideImage = computed(() => {
@@ -237,16 +162,115 @@ const currentSlideImage = computed(() => {
   return selectedProject.value.image
 })
 
-const openProject = (project: Project) => {
+const handleModalKeydown = (e: KeyboardEvent) => {
+  if (e.key === 'Escape') closeProject()
+  else if (e.key === 'ArrowRight') nextSlide()
+  else if (e.key === 'ArrowLeft') prevSlide()
+}
+
+/* ----- Deep-linkable case studies (#/case/<slug>) ----- */
+
+const CASE_HASH = /^#\/case\/(.+)$/
+
+const modalRef = ref<HTMLElement | null>(null)
+const closeBtnRef = ref<HTMLButtonElement | null>(null)
+let lastFocusedEl: HTMLElement | null = null
+
+const openProject = (project: Project, opts: { syncHash?: boolean } = {}) => {
   selectedProject.value = project
   activeSlideIndex.value = 0
   document.body.style.overflow = 'hidden' // prevent body scrolling
+  document.addEventListener('keydown', handleModalKeydown)
+
+  // Remember what had focus so closing can hand it back
+  lastFocusedEl = document.activeElement as HTMLElement | null
+  nextTick(() => closeBtnRef.value?.focus())
+
+  // Reflect the open case study in the URL without triggering hashchange
+  if (opts.syncHash !== false) {
+    const target = `#/case/${project.slug}`
+    if (location.hash !== target) {
+      try {
+        history.pushState(null, '', target)
+      } catch {
+        location.hash = target
+      }
+    }
+  }
 }
 
 const closeProject = () => {
+  if (!selectedProject.value) return
   selectedProject.value = null
-  document.body.style.overflow = 'auto' // restore body scrolling
+  // '' hands scrolling back to the stylesheet; 'auto' would pin it to a value
+  // the page never set in the first place.
+  document.body.style.overflow = ''
+  document.removeEventListener('keydown', handleModalKeydown)
+
+  // Drop the #/case/... hash without adding a history entry, so the browser
+  // Back button goes to the page the visitor came from, not the closed modal.
+  if (CASE_HASH.test(location.hash)) {
+    history.replaceState(null, '', location.pathname + location.search)
+  }
+
+  lastFocusedEl?.focus?.()
+  lastFocusedEl = null
 }
+
+// Keep the modal in sync with the URL (Back/Forward buttons, pasted deep links)
+const syncFromHash = () => {
+  const match = location.hash.match(CASE_HASH)
+  if (match) {
+    // decodeURIComponent throws on malformed hashes like #/case/% — never let
+    // a hand-edited URL break the hashchange handler.
+    let slug = ''
+    try {
+      slug = decodeURIComponent(match[1])
+    } catch {
+      return
+    }
+    const project = slugIndex.get(slug)
+    if (project && selectedProject.value?.id !== project.id) {
+      openProject(project, { syncHash: false })
+    }
+  } else if (selectedProject.value) {
+    closeProject()
+  }
+}
+
+// Cycle Tab within the modal so keyboard users can't reach the page behind it
+const trapFocus = (e: KeyboardEvent) => {
+  const root = modalRef.value
+  if (!root) return
+  const focusables = Array.from(root.querySelectorAll<HTMLElement>(
+    'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+  ))
+  if (!focusables.length) return
+  const first = focusables[0]
+  const last = focusables[focusables.length - 1]
+  const active = document.activeElement
+  if (e.shiftKey && (active === first || active === root)) {
+    e.preventDefault()
+    last.focus()
+  } else if (!e.shiftKey && active === last) {
+    e.preventDefault()
+    first.focus()
+  }
+}
+
+onMounted(() => {
+  // Support opening a case study straight from a shared URL
+  syncFromHash()
+  window.addEventListener('hashchange', syncFromHash)
+})
+
+// Closing the tab mid-modal must not leave <body> locked, the listener bound,
+// or the URL holding a case-study hash that no longer exists.
+onUnmounted(() => {
+  document.body.style.overflow = ''
+  document.removeEventListener('keydown', handleModalKeydown)
+  window.removeEventListener('hashchange', syncFromHash)
+})
 
 const nextSlide = () => {
   if (selectedProject.value?.slides) {
@@ -269,9 +293,9 @@ const prevSlide = () => {
 }
 
 .category-pill {
-  background: rgba(0, 102, 226, 0.1);
+  background: rgba(var(--color-primary-rgb), 0.1);
   color: var(--color-primary);
-  border: 1px solid rgba(0, 102, 226, 0.2);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.2);
   padding: 6px 16px;
   border-radius: 50px;
   font-size: 0.85rem;

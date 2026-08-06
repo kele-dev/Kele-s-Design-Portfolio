@@ -2,7 +2,7 @@
   <div class="logo-container interactive" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
     <a href="#hero" class="logo-link">
       <img 
-        src="/assets/kele_logo_official.png" 
+        src="/assets/kele_logo_official.svg" 
         alt="kele design" 
         class="official-logo-img" 
         :class="{ 'logo-hovered': isHovered }" 
@@ -41,6 +41,6 @@ const isHovered = ref(false)
 
 .logo-hovered {
   transform: scale(1.08) translateY(-2px);
-  filter: drop-shadow(0 4px 20px rgba(255, 210, 0, 0.5));
+  filter: drop-shadow(0 4px 20px rgba(var(--color-accent-rgb), 0.5));
 }
 </style>
