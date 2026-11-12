@@ -14,7 +14,7 @@
 
     <!-- Floating Glassmorphic Header Navigation -->
     <header class="floating-header-wrapper" :class="{ 'scrolled': isScrolled }">
-      <nav class="floating-navbar">
+      <nav class="floating-navbar" aria-label="Navigasi utama">
         <div class="nav-brand">
           <KeleLogo />
         </div>
@@ -28,12 +28,25 @@
         </ul>
 
         <div class="nav-actions">
-          <button 
-            @click="cycleTheme" 
-            class="theme-toggle-btn interactive" 
-            title="Ubah Warna Aksen Tema"
+          <button
+            type="button"
+            class="motion-toggle-btn interactive"
+            :aria-pressed="motionPaused ? 'true' : 'false'"
+            :aria-label="motionPaused ? 'Putar animasi' : 'Jeda animasi'"
+            @click="toggleMotion"
           >
-            <div class="theme-icon-semicircle" :style="{ transform: `rotate(${themeAngle}deg)` }"></div>
+            <svg v-if="motionPaused" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg v-else aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          </button>
+
+          <button
+            type="button"
+            @click="cycleTheme"
+            class="theme-toggle-btn interactive"
+            title="Ubah Warna Aksen Tema"
+            aria-label="Ganti warna aksen tema"
+          >
+            <div class="theme-icon-semicircle" aria-hidden="true" :style="{ transform: `rotate(${themeAngle}deg)` }"></div>
           </button>
 
           <a href="#contact" class="btn-proposal-pill interactive">
@@ -42,14 +55,17 @@
 
           <!-- Mobile hamburger: nav links are hidden below 768px, so this is the
                only way phone visitors can jump between sections. -->
-          <button 
-            class="mobile-menu-btn interactive" 
+          <button
+            ref="menuBtnRef"
+            type="button"
+            class="mobile-menu-btn interactive"
             :aria-expanded="mobileMenuOpen ? 'true' : 'false'"
-            aria-label="Buka menu navigasi"
+            aria-controls="mobile-menu"
+            :aria-label="mobileMenuOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi'"
             @click="toggleMobileMenu"
           >
-            <svg v-if="!mobileMenuOpen" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-            <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            <svg v-if="!mobileMenuOpen" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            <svg v-else aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
           </button>
         </div>
       </nav>
@@ -57,8 +73,17 @@
 
     <!-- Mobile Full-Screen Menu Overlay -->
     <Transition name="mobile-menu">
-      <div v-if="mobileMenuOpen" class="mobile-menu-overlay">
-        <nav class="mobile-menu-nav">
+      <div
+        v-if="mobileMenuOpen"
+        id="mobile-menu"
+        ref="menuOverlayRef"
+        class="mobile-menu-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu navigasi"
+        @keydown.tab="trapFocus"
+      >
+        <nav class="mobile-menu-nav" aria-label="Navigasi mobile">
           <a 
             v-for="link in mobileLinks" 
             :key="link.id"
@@ -76,6 +101,7 @@
       </div>
     </Transition>
 
+    <main id="main">
     <!-- Hero Section -->
     <section class="hero-section" id="hero">
       <div class="container hero-container">
@@ -120,9 +146,6 @@
       <InteractiveStickers />
     </section>
 
-    <!-- Animated Endless Logo Marquee Ticker -->
-    <LogoMarquee />
-
     <!-- Works / Portfolio Section -->
     <PortfolioGrid />
 
@@ -136,11 +159,11 @@
               <div class="avatar-photo-wrapper">
                 <div class="photo-backdrop-circle"></div>
                 <div class="photo-backdrop-semicircle"></div>
-                <img src="/assets/bagus_photo.png" alt="Bagus Hari Wijaya — kele design" class="user-photo" loading="lazy" decoding="async" />
+                <img src="/assets/bagus_photo.png" alt="Bagus Hari Wijaya, kele design" class="user-photo" width="678" height="930" loading="lazy" decoding="async" />
               </div>
               <div class="avatar-card-info">
-                <h3>Bagus Hari Wijaya</h3>
-                <p>Graphic & Brand Designer — kele design</p>
+                <p class="avatar-name">Bagus Hari Wijaya</p>
+                <p>Graphic & Brand Designer, kele design</p>
               </div>
             </div>
           </div>
@@ -158,7 +181,7 @@
             </p>
             
             <div class="skills-wrapper">
-              <h4 class="skills-title">Keahlian & Bidang Fokus:</h4>
+              <h3 class="skills-title">Keahlian & Bidang Fokus:</h3>
               <div class="skills-tags">
                 <span class="skill-tag glass-panel interactive" v-for="skill in skills" :key="skill">{{ skill }}</span>
               </div>
@@ -193,16 +216,6 @@
                 <span class="item-label">Lokasi</span>
                 <span class="item-val">Jakarta, Indonesia</span>
               </div>
-              <div class="contact-item">
-                <span class="item-label">Media Sosial</span>
-                <!-- TODO: ganti dengan profil asli Bagus di masing-masing platform -->
-                <div class="social-links">
-                  <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" class="social-link interactive">Instagram</a>
-                  <a href="https://dribbble.com/" target="_blank" rel="noopener noreferrer" class="social-link interactive">Dribbble</a>
-                  <a href="https://www.behance.net/" target="_blank" rel="noopener noreferrer" class="social-link interactive">Behance</a>
-                  <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" class="social-link interactive">LinkedIn</a>
-                </div>
-              </div>
             </div>
             
             <!-- The form composes a mailto: link from the fields so submissions
@@ -230,6 +243,7 @@
         </div>
       </div>
     </section>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
@@ -238,30 +252,30 @@
           <span class="footer-logo">kele.</span>
           <p>© 2026 kele design studio. Dibuat dengan Vue 3 & Motion.</p>
         </div>
-        <div class="footer-right">
-          <p>Tahun Berdiri: <strong>2023</strong></p>
-        </div>
       </div>
     </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import StudioPreloader from './components/StudioPreloader.vue'
 import SideBadge from './components/SideBadge.vue'
 import CreativeBackground from './components/CreativeBackground.vue'
 import KeleLogo from './components/KeleLogo.vue'
 import CustomCursor from './components/CustomCursor.vue'
 import InteractiveStickers from './components/InteractiveStickers.vue'
-import LogoMarquee from './components/LogoMarquee.vue'
 import PortfolioGrid from './components/PortfolioGrid.vue'
 import UmkmImpact from './components/UmkmImpact.vue'
 import { useTheme } from './composables/useTheme'
+import { useMotionPause } from './composables/useMotionPause'
 import { headlines, skills } from './content'
 
 // Playful Accent Color Theme Cycling Logic (persisted to localStorage)
 const { themeAngle, themeStyles, cycleTheme } = useTheme()
+
+// Ambient animation pause (starts paused under prefers-reduced-motion)
+const { motionPaused, toggleMotion } = useMotionPause()
 
 const activeHeadlineIndex = ref(0)
 let headlineTimer: number | undefined
@@ -324,16 +338,47 @@ const mobileLinks = [
 ]
 
 const mobileMenuOpen = ref(false)
+const menuBtnRef = ref<HTMLButtonElement | null>(null)
+const menuOverlayRef = ref<HTMLElement | null>(null)
 
 const closeMobileMenu = () => {
+  const wasOpen = mobileMenuOpen.value
   mobileMenuOpen.value = false
   document.body.style.overflow = ''
+  // Hand focus back to the hamburger that opened the overlay
+  if (wasOpen) menuBtnRef.value?.focus()
 }
 
 const toggleMobileMenu = () => {
-  mobileMenuOpen.value = !mobileMenuOpen.value
+  if (mobileMenuOpen.value) {
+    closeMobileMenu()
+    return
+  }
+  mobileMenuOpen.value = true
   // Lock page scroll while the overlay is up
-  document.body.style.overflow = mobileMenuOpen.value ? 'hidden' : ''
+  document.body.style.overflow = 'hidden'
+  nextTick(() => {
+    menuOverlayRef.value?.querySelector<HTMLElement>('a[href]')?.focus()
+  })
+}
+
+// Cycle Tab within the mobile overlay (same approach as PortfolioGrid trapFocus)
+const trapFocus = (e: KeyboardEvent) => {
+  const root = menuOverlayRef.value
+  if (!root) return
+  const focusables = Array.from(root.querySelectorAll<HTMLElement>(
+    'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+  ))
+  if (!focusables.length) return
+  const first = focusables[0]
+  const last = focusables[focusables.length - 1]
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault()
+    last.focus()
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault()
+    first.focus()
+  }
 }
 
 const handleMenuEscape = (e: KeyboardEvent) => {
@@ -362,9 +407,15 @@ const stopHeadlineTimer = () => {
 }
 
 const handleVisibility = () => {
-  if (document.hidden) stopHeadlineTimer()
+  if (document.hidden || motionPaused.value) stopHeadlineTimer()
   else startHeadlineTimer()
 }
+
+// Stop the headline rotation while motion is paused, resume when it is played again
+watch(motionPaused, (paused) => {
+  if (paused) stopHeadlineTimer()
+  else if (!document.hidden) startHeadlineTimer()
+})
 
 onMounted(() => {
   measureScroll()
@@ -373,7 +424,7 @@ onMounted(() => {
   window.addEventListener('resize', handleMenuResize)
   document.addEventListener('visibilitychange', handleVisibility)
 
-  startHeadlineTimer()
+  if (!motionPaused.value) startHeadlineTimer()
 })
 
 onUnmounted(() => {
@@ -489,8 +540,9 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
   border-radius: 50%;
   border: 1px solid var(--border-glass);
   background: var(--border-subtle);
@@ -499,6 +551,27 @@ onUnmounted(() => {
 }
 
 .theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.1);
+}
+
+/* Motion pause/play button, same look as the theme toggle, 44x44 target */
+.motion-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border-glass);
+  background: var(--border-subtle);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
+}
+
+.motion-toggle-btn:hover {
   background: rgba(255, 255, 255, 0.15);
   transform: scale(1.1);
 }
@@ -516,8 +589,9 @@ onUnmounted(() => {
   display: none;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
   border-radius: 50%;
   border: 1px solid var(--border-glass);
   background: var(--border-subtle);
@@ -535,6 +609,7 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-height: 44px;
   padding: 0.55rem 1.25rem;
   border-radius: 9999px;
   background-color: var(--pill-cta-bg);
@@ -630,6 +705,9 @@ onUnmounted(() => {
   }
   .floating-navbar {
     padding: 0.5rem 0.9rem;
+  }
+  .nav-actions > .btn-proposal-pill {
+    display: none;
   }
 }
 

@@ -10,22 +10,6 @@
           </p>
         </div>
 
-        <!-- Metric Stat Counters (Visual Identity Studio Style) -->
-        <div class="metrics-row">
-          <div class="metric-card glass-panel">
-            <span class="metric-number">81%</span>
-            <span class="metric-label">Konsumen harus memercayai karakter visual brand sebelum melakukan pembelian</span>
-          </div>
-          <div class="metric-card glass-panel">
-            <span class="metric-number">55%</span>
-            <span class="metric-label">Kesan pertama pembeli terbentuk secara instan dari identitas desain</span>
-          </div>
-          <div class="metric-card glass-panel">
-            <span class="metric-number">12+</span>
-            <span class="metric-label">Mitra UMKM lokal telah terbantu menaikkan nilai jual & daya saing</span>
-          </div>
-        </div>
-
         <div class="pillars-grid">
           <div 
             v-for="pillar in pillars" 
@@ -42,10 +26,6 @@
         </div>
 
         <div class="umkm-cta-row">
-          <div class="cta-badge">
-            <span class="pulse-dot"></span>
-            <span>Program Pendampingan Visual UMKM Aktif</span>
-          </div>
           <a href="#contact" class="btn-primary interactive">
             Konsultasi Brand UMKM
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -90,45 +70,6 @@ import { pillars } from '../content'
   color: var(--text-secondary);
   font-size: 1.1rem;
   line-height: 1.6;
-}
-
-/* Metrics Row */
-.metrics-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-bottom: 48px;
-}
-
-.metric-card {
-  padding: 28px 24px;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  transition: transform 0.3s ease;
-}
-
-.metric-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--border-glass);
-}
-
-.metric-number {
-  font-size: 3.2rem;
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  color: var(--text-primary);
-  line-height: 1;
-}
-
-.metric-label {
-  font-size: 0.88rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  font-weight: 500;
 }
 
 .pillars-grid {
@@ -184,7 +125,7 @@ import { pillars } from '../content'
 
 .umkm-cta-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding-top: 32px;
   border-top: 1px solid var(--border-subtle);
@@ -192,31 +133,8 @@ import { pillars } from '../content'
   gap: 20px;
 }
 
-.cta-badge {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.pulse-dot {
-  width: 10px;
-  height: 10px;
-  background: var(--text-primary);
-  border-radius: 50%;
-  animation: pulse-ring 2s infinite ease-in-out;
-}
-
-@keyframes pulse-ring {
-  0% { transform: scale(0.95); opacity: 0.6; }
-  50% { transform: scale(1.3); opacity: 1; }
-  100% { transform: scale(0.95); opacity: 0.6; }
-}
-
 @media (max-width: 900px) {
-  .metrics-row, .pillars-grid {
+  .pillars-grid {
     grid-template-columns: 1fr;
   }
   .umkm-card {

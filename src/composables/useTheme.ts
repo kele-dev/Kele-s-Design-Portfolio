@@ -5,6 +5,8 @@ export interface Theme {
   primaryRgb: string
   accent: string
   accentRgb: string
+  primaryText: string
+  onPrimary: string
 }
 
 export const themes: Theme[] = [
@@ -12,25 +14,33 @@ export const themes: Theme[] = [
     primary: '#0066e2',
     primaryRgb: '0, 102, 226',
     accent: '#ffd200',
-    accentRgb: '255, 210, 0'
+    accentRgb: '255, 210, 0',
+    primaryText: '#66A3EE',
+    onPrimary: '#ffffff'
   },
   {
     primary: '#8a2be2', // Neon Purple
     primaryRgb: '138, 43, 226',
     accent: '#39ff14', // Neon Green
-    accentRgb: '57, 255, 20'
+    accentRgb: '57, 255, 20',
+    primaryText: '#B980EE',
+    onPrimary: '#ffffff'
   },
   {
     primary: '#ff5e00', // Vivid Orange
     primaryRgb: '255, 94, 0',
     accent: '#00e5ff', // Neon Cyan
-    accentRgb: '0, 229, 255'
+    accentRgb: '0, 229, 255',
+    primaryText: '#ff5e00',
+    onPrimary: '#0a0a0c'
   },
   {
     primary: '#ff007f', // Electric Pink
     primaryRgb: '255, 0, 127',
     accent: '#00f6ff', // Electric Cyan
-    accentRgb: '0, 246, 255'
+    accentRgb: '0, 246, 255',
+    primaryText: '#ff007f',
+    onPrimary: '#0a0a0c'
   }
 ]
 
@@ -58,7 +68,9 @@ export function useTheme() {
       '--color-primary': theme.primary,
       '--color-primary-rgb': theme.primaryRgb,
       '--color-accent': theme.accent,
-      '--color-accent-rgb': theme.accentRgb
+      '--color-accent-rgb': theme.accentRgb,
+      '--color-primary-text': theme.primaryText,
+      '--color-on-primary': theme.onPrimary
     }
   })
 

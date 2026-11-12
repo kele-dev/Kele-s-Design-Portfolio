@@ -1,16 +1,19 @@
 <template>
   <div class="stickers-area" ref="areaRef">
 
-    <div 
-      v-for="sticker in stickers" 
+    <button
+      v-for="sticker in stickers"
       :key="sticker.id"
+      type="button"
       class="sticker-wrapper"
       :class="{ 'dragging': sticker.isDragging }"
-      :style="{ 
+      :style="{
         transform: `translate(${sticker.x}px, ${sticker.y}px)`,
         zIndex: sticker.zIndex
       }"
+      :aria-label="`Stiker ${sticker.hasHalfMoon ? 'kele design' : sticker.text}, geser dengan tombol panah`"
       @pointerdown="startDrag($event, sticker)"
+      @keydown="nudgeSticker($event, sticker)"
     >
       <div 
         class="sticker interactive"
@@ -29,7 +32,7 @@
         </div>
         <span v-else>{{ sticker.text }}</span>
       </div>
-    </div>
+    </button>
   </div>
 </template>
 
@@ -85,6 +88,25 @@ onUnmounted(() => {
   releaseDrag?.()
 })
 
+// Keyboard nudge: arrows move 16px, Shift moves 48px. Brings the sticker to front like a drag.
+const nudgeSticker = (event: KeyboardEvent, sticker: Sticker) => {
+  const step = event.shiftKey ? 48 : 16
+  const moves: Record<string, [number, number]> = {
+    ArrowLeft: [-step, 0],
+    ArrowRight: [step, 0],
+    ArrowUp: [0, -step],
+    ArrowDown: [0, step],
+  }
+  const delta = moves[event.key]
+  if (!delta) return
+
+  event.preventDefault()
+  topZ += 1
+  sticker.zIndex = topZ
+  sticker.x += delta[0]
+  sticker.y += delta[1]
+}
+
 const startDrag = (event: PointerEvent, sticker: Sticker) => {
   event.preventDefault()
 
@@ -137,10 +159,24 @@ const startDrag = (event: PointerEvent, sticker: Sticker) => {
 
 .sticker-wrapper {
   position: absolute;
+  /* Reset native button styles */
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
   pointer-events: auto;
   user-select: none;
   cursor: grab;
   will-change: transform;
+}
+
+.sticker-wrapper:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 4px;
+  border-radius: 14px;
 }
 
 .sticker-wrapper.dragging {
