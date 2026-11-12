@@ -2,9 +2,12 @@
   <div class="logo-container interactive" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
     <a href="#hero" class="logo-link">
       <img 
-        src="/assets/kele_logo_official.svg" 
-        alt="kele design" 
-        class="official-logo-img" 
+        src="/assets/kele_logo_official.png"
+        alt="kele design"
+        width="300"
+        height="129"
+        fetchpriority="high"
+        class="official-logo-img"
         :class="{ 'logo-hovered': isHovered }" 
       />
     </a>

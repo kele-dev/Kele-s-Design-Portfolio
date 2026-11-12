@@ -37,7 +37,7 @@
           @keydown.space.prevent="openProject(project)"
         >
           <div class="project-image-wrapper">
-            <img :src="project.image" :alt="project.title" class="project-image" loading="lazy" decoding="async" />
+            <img :src="project.image" :alt="project.title" class="project-image" width="1024" height="1024" loading="lazy" decoding="async" />
             
             <!-- Special Project Badge Tag -->
             <div v-if="project.badge" class="special-badge-pill">
@@ -81,7 +81,7 @@
             <div class="modal-body">
               <!-- Multi-Slide Image Container -->
               <div class="modal-image-container">
-                <img :src="currentSlideImage" :alt="selectedProject.title" class="modal-image" />
+                <img :src="currentSlideImage" :alt="selectedProject.title" class="modal-image" width="1024" height="1024" />
                 
                 <!-- Slide Navigation Controls if project has multiple slides -->
                 <div v-if="selectedProject.slides && selectedProject.slides.length > 1" class="slide-nav-controls">
@@ -103,7 +103,7 @@
                 
                 <div class="modal-meta-grid">
                   <div class="meta-item">
-                    <span class="meta-label">Klien / Sektor</span>
+                    <span class="meta-label">Sektor</span>
                     <span class="meta-val">{{ selectedProject.client }}</span>
                   </div>
                   <div class="meta-item">
@@ -119,12 +119,12 @@
                 <div class="modal-divider"></div>
                 
                 <div class="modal-desc-section">
-                  <h4 class="modal-section-title">Tantangan Komunikasi Visual</h4>
+                  <h3 class="modal-section-title">Tantangan Komunikasi Visual</h3>
                   <p class="modal-paragraph">{{ selectedProject.challenge }}</p>
                 </div>
                 
                 <div class="modal-desc-section">
-                  <h4 class="modal-section-title">Solusi Layout & Branding</h4>
+                  <h3 class="modal-section-title">Solusi Layout & Branding</h3>
                   <p class="modal-paragraph">{{ selectedProject.solution }}</p>
                 </div>
               </div>
@@ -294,7 +294,7 @@ const prevSlide = () => {
 
 .category-pill {
   background: rgba(var(--color-primary-rgb), 0.1);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   border: 1px solid rgba(var(--color-primary-rgb), 0.2);
   padding: 6px 16px;
   border-radius: 50px;
@@ -332,6 +332,7 @@ const prevSlide = () => {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
+  min-height: 44px;
   padding: 10px 24px;
   border-radius: 9999px;
   font-weight: 700;
@@ -624,6 +625,11 @@ const prevSlide = () => {
 }
 
 .slide-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
   background: transparent;
   border: none;
   color: #ffffff;

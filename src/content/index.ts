@@ -55,7 +55,7 @@ export const projects: Project[] = [
     slug: 'kele-artisan-coffee',
     title: 'Kele Artisan Coffee & Bakery Identity',
     category: 'Full Brand Systems',
-    badge: '⭐ Full Identity',
+    badge: 'Proyek konsep',
     mediaFormats: 'Logo System • Guidelines • Merchandise • Packaging',
     shortDesc: 'Sistem identitas merek komplit dari konstruksi logo, panduan warna, hingga kaos merchandise dan stiker kemasan.',
     image: '/assets/branding_mockup.png',
@@ -64,7 +64,7 @@ export const projects: Project[] = [
       '/assets/illustration_mockup.png',
       '/assets/typography_mockup.png'
     ],
-    client: 'Kele Coffee Co. (UMKM Partner)',
+    client: 'Konsep: kedai kopi & bakery',
     year: '2024',
     role: 'Lead Brand System Designer',
     challenge: 'Usaha lokal kedai kopi & bakery membutuhkan identitas visual utuh dari logo hingga merch agar mampu bersaing dengan waralaba kopi besar.',
@@ -75,7 +75,7 @@ export const projects: Project[] = [
     slug: 'space-explorer-saas',
     title: 'Space Explorer SaaS Web App',
     category: 'Web & Digital',
-    badge: '🌐 Web Design',
+    badge: 'Proyek konsep',
     mediaFormats: 'Website Design • UI/UX • Interactive Landing Page',
     shortDesc: 'Desain website antarmuka interaktif dan landing page promosi aplikasi dengan visualisasi data gelap imersif.',
     image: '/assets/ui_ux_mockup.png',
@@ -83,7 +83,7 @@ export const projects: Project[] = [
       '/assets/ui_ux_mockup.png',
       '/assets/typography_mockup.png'
     ],
-    client: 'Galaxy Works Studio',
+    client: 'Konsep: aplikasi web SaaS',
     year: '2025',
     role: 'Web UI/UX Designer',
     challenge: 'Merancang tata letak website yang responsif dan menyajikan fitur aplikasi digital secara visual tanpa membingungkan calon pembeli.',
@@ -94,7 +94,7 @@ export const projects: Project[] = [
     slug: 'artisan-culinary-menu',
     title: 'Artisan Culinary & Menu Suite',
     category: 'F&B & Retail',
-    badge: '🌱 UMKM Partner',
+    badge: 'Proyek konsep',
     mediaFormats: 'Social Media Feed • Menu Poster • POS Display',
     shortDesc: 'Koleksi materi promosi cetak & digital tempat makan lokal meliputi menu fisik, feed Instagram, dan banner toko.',
     image: '/assets/illustration_mockup.png',
@@ -102,7 +102,7 @@ export const projects: Project[] = [
       '/assets/illustration_mockup.png',
       '/assets/branding_mockup.png'
     ],
-    client: 'Warung Kuliner Nusantara (UMKM)',
+    client: 'Konsep: warung makan lokal',
     year: '2024',
     role: 'F&B Visual Designer',
     challenge: 'Meningkatkan penjualan tempat makan lokal dengan memperbaiki hirarki baca poster menu dan visual feed promo sosial media.',
@@ -113,7 +113,7 @@ export const projects: Project[] = [
     slug: 'urban-apparel-streetwear',
     title: 'Urban Apparel & Streetwear Suite',
     category: 'Fashion & Corporate',
-    badge: '⭐ Full Identity',
+    badge: 'Proyek konsep',
     mediaFormats: 'Lookbook Feed • Merchandise • Launch Poster',
     shortDesc: 'Desain kampanye brand pakaian street-style meliputi seri poster acara, merchandise kaos, dan lookbook sosial media.',
     image: '/assets/typography_mockup.png',
@@ -121,30 +121,12 @@ export const projects: Project[] = [
       '/assets/typography_mockup.png',
       '/assets/branding_mockup.png'
     ],
-    client: 'Synergy Urban Apparel',
+    client: 'Konsep: brand streetwear',
     year: '2024',
     role: 'Fashion Campaign & Merch Designer',
     challenge: 'Membuat visual rilis produk pakaian street-style yang berani, artistik, dan mencolok di keramaian feed sosial media.',
     solution: 'Menggabungkan tipografi distorsi geometris Plus Jakarta Sans dengan kontras warna pop-art yang tegas untuk memperkuat impresi visual.'
   }
-]
-
-/* ------------------------------- Logo Marquee Logos ------------------------------ */
-
-export interface LogoMark {
-  name: string
-  color: string
-  path: string
-  badge?: string
-}
-
-export const logos: LogoMark[] = [
-  { name: 'Kele Culinary', color: '#ffd200', path: 'M 14 10 A 10 10 0 0 1 14 30 Z', badge: 'F&B' },
-  { name: 'Synergy Apparel', color: '#ff3366', path: 'M 10 10 L 30 10 L 20 30 Z', badge: 'Fashion' },
-  { name: 'Galaxy Tech', color: '#00d2ff', path: 'M 20 10 L 30 20 L 20 30 L 10 20 Z', badge: 'SaaS' },
-  { name: 'Retro FMCG', color: '#00cc99', path: 'M 10 15 H 30 V 25 H 10 Z', badge: 'Retail' },
-  { name: 'Local Coffee Co', color: '#ff9900', path: 'M 15 10 A 8 8 0 0 1 25 10 L 25 25 H 15 Z', badge: 'UMKM' },
-  { name: 'Urban Studio', color: '#9933ff', path: 'M 12 12 L 28 12 L 28 28 L 12 28 Z', badge: 'Brand' }
 ]
 
 /* ------------------------------------ Pillars ----------------------------------- */
@@ -207,8 +189,8 @@ export interface Sticker {
 export const stickers: Sticker[] = [
   { id: 1, text: 'kele design', x: 0, y: 0, zIndex: 1, bg: '#0066e2', color: '#ffffff', hasHalfMoon: true, border: '3px solid #ffffff' },
   { id: 2, text: '💡 Ideas & Impact', x: 0, y: 0, zIndex: 2, bg: '#ffd200', color: '#080d1a', border: '3px solid #ffffff' },
-  { id: 3, text: '🎨 UI/UX', x: 0, y: 0, zIndex: 3, bg: '#ff3366', color: '#ffffff', border: '3px solid #ffffff' },
+  { id: 3, text: '🎨 UI/UX', x: 0, y: 0, zIndex: 3, bg: '#ff3366', color: '#080d1a', border: '3px solid #ffffff' },
   { id: 4, text: 'CMYK', x: 0, y: 0, zIndex: 4, bg: '#ffffff', color: '#080d1a', border: '3px solid #0066e2' },
-  { id: 5, text: '👋 Halo, Saya Bagus', x: 0, y: 0, zIndex: 5, bg: '#00cc99', color: '#ffffff', border: '3px solid #ffffff' },
+  { id: 5, text: '👋 Halo, Saya Bagus', x: 0, y: 0, zIndex: 5, bg: '#00cc99', color: '#080d1a', border: '3px solid #ffffff' },
   { id: 6, text: 'Plus Jakarta Sans', x: 0, y: 0, zIndex: 6, bg: 'rgba(8, 13, 26, 0.95)', color: '#ffd200', border: '1px solid rgba(255, 255, 255, 0.2)' }
 ]
