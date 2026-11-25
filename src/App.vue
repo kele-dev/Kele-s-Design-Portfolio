@@ -238,6 +238,10 @@
                 <span>Kirim Pesan</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="send-icon"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
               </button>
+              <p v-if="formFeedback" class="form-feedback" role="status">
+                Aplikasi email Anda sedang dibuka — atau tulis langsung ke
+                <a href="mailto:kele.designid@gmail.com" class="interactive">kele.designid@gmail.com</a>.
+              </p>
             </form>
           </div>
         </div>
@@ -293,7 +297,13 @@ const handleSubmit = () => {
     `Halo Bagus,\n\nNama: ${form.name}\nEmail: ${form.email}\n\nPesan:\n${form.message}`
   )
   window.location.href = `mailto:kele.designid@gmail.com?subject=${subject}&body=${body}`
+  // Visible feedback: webmail-only users see nothing happen without this.
+  formFeedback.value = 1
+  window.setTimeout(() => { formFeedback.value = 0 }, 6000)
 }
+
+// 0 = hidden, 1 = "email app opening" hint
+const formFeedback = ref(0)
 
 // Scrolled Header state
 const isScrolled = ref(false)
@@ -741,5 +751,18 @@ onUnmounted(() => {
 .headline-slide-leave-to {
   opacity: 0;
   transform: translateY(-30px);
+}
+
+.form-feedback {
+  margin-top: 0.9rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-secondary, #9CA3AF);
+  animation: form-feedback-in 0.25s ease-out;
+}
+
+@keyframes form-feedback-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>
