@@ -66,87 +66,23 @@
       </TransitionGroup>
 
       <!-- Case Study Modal with Multi-Slide Viewer. Deep-linkable via #/case/<slug>. -->
-      <Transition name="modal">
-        <div
-          v-if="selectedProject"
-          class="modal-overlay"
-          role="dialog"
-          aria-modal="true"
-          :aria-label="selectedProject.title"
-          @click.self="closeProject"
-          @keydown.tab="trapFocus"
-        >
-          <div class="modal-content glass-panel" ref="modalRef">
-            <button ref="closeBtnRef" class="modal-close-btn interactive" aria-label="Tutup" @click="closeProject">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-            </button>
-            
-            <div class="modal-body">
-              <!-- Multi-Slide Image Container -->
-              <div class="modal-image-container">
-                <img :src="currentSlideImage" :alt="selectedProject.title" class="modal-image" width="1024" height="1024" />
-                
-                <!-- Slide Navigation Controls if project has multiple slides -->
-                <div v-if="selectedProject.slides && selectedProject.slides.length > 1" class="slide-nav-controls">
-                  <button @click="prevSlide" class="slide-btn interactive" aria-label="Slide sebelumnya" title="Slide Sebelumnya">‹</button>
-                  <span class="slide-indicator">{{ activeSlideIndex + 1 }} / {{ selectedProject.slides.length }}</span>
-                  <button @click="nextSlide" class="slide-btn interactive" aria-label="Slide selanjutnya" title="Slide Selanjutnya">›</button>
-                </div>
-              </div>
-
-              <!-- Modal Text Content -->
-              <div class="modal-text-content">
-                <div class="modal-header-info">
-                  <div class="modal-badge-row">
-                    <span v-if="selectedProject.badge" class="special-badge-pill modal-special-badge">{{ selectedProject.badge }}</span>
-                    <span class="modal-category">{{ selectedProject.category }}</span>
-                  </div>
-                  <h2 class="modal-title">{{ selectedProject.title }}</h2>
-                </div>
-                
-                <div class="modal-meta-grid">
-                  <div class="meta-item">
-                    <span class="meta-label">Sektor</span>
-                    <span class="meta-val">{{ selectedProject.client }}</span>
-                  </div>
-                  <div class="meta-item">
-                    <span class="meta-label">Tahun</span>
-                    <span class="meta-val">{{ selectedProject.year }}</span>
-                  </div>
-                  <div class="meta-item">
-                    <span class="meta-label">Peran Desain</span>
-                    <span class="meta-val">{{ selectedProject.role }}</span>
-                  </div>
-                </div>
-                
-                <div class="modal-divider"></div>
-                
-                <div class="modal-desc-section">
-                  <h3 class="modal-section-title">Tantangan Komunikasi Visual</h3>
-                  <p class="modal-paragraph">{{ selectedProject.challenge }}</p>
-                </div>
-                
-                <div class="modal-desc-section">
-                  <h3 class="modal-section-title">Solusi Layout & Branding</h3>
-                  <p class="modal-paragraph">{{ selectedProject.solution }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Transition>
+      <CaseStudyModal
+        v-if="selectedProject"
+        :project="selectedProject"
+        @close="closeProject"
+      />
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { categories, projects as allProjects, type Project } from '../content'
 import { trackEvent } from '../analytics'
+import CaseStudyModal from './CaseStudyModal.vue'
 
 const activeCategory = ref('All')
 const selectedProject = ref<Project | null>(null)
-const activeSlideIndex = ref(0)
 
 const projects = allProjects
 
@@ -158,38 +94,13 @@ const filteredProjects = computed(() => {
   return projects.filter(p => p.category === activeCategory.value)
 })
 
-const currentSlideImage = computed(() => {
-  if (!selectedProject.value) return ''
-  if (selectedProject.value.slides && selectedProject.value.slides.length > 0) {
-    return selectedProject.value.slides[activeSlideIndex.value] || selectedProject.value.image
-  }
-  return selectedProject.value.image
-})
-
-const handleModalKeydown = (e: KeyboardEvent) => {
-  if (e.key === 'Escape') closeProject()
-  else if (e.key === 'ArrowRight') nextSlide()
-  else if (e.key === 'ArrowLeft') prevSlide()
-}
-
 /* ----- Deep-linkable case studies (#/case/<slug>) ----- */
 
 const CASE_HASH = /^#\/case\/(.+)$/
 
-const modalRef = ref<HTMLElement | null>(null)
-const closeBtnRef = ref<HTMLButtonElement | null>(null)
-let lastFocusedEl: HTMLElement | null = null
-
 const openProject = (project: Project, opts: { syncHash?: boolean } = {}) => {
   trackEvent('case_open', project.title)
   selectedProject.value = project
-  activeSlideIndex.value = 0
-  document.body.style.overflow = 'hidden' // prevent body scrolling
-  document.addEventListener('keydown', handleModalKeydown)
-
-  // Remember what had focus so closing can hand it back
-  lastFocusedEl = document.activeElement as HTMLElement | null
-  nextTick(() => closeBtnRef.value?.focus())
 
   // Reflect the open case study in the URL without triggering hashchange
   if (opts.syncHash !== false) {
@@ -207,10 +118,6 @@ const openProject = (project: Project, opts: { syncHash?: boolean } = {}) => {
 const closeProject = () => {
   if (!selectedProject.value) return
   selectedProject.value = null
-  // '' hands scrolling back to the stylesheet; 'auto' would pin it to a value
-  // the page never set in the first place.
-  document.body.style.overflow = ''
-  document.removeEventListener('keydown', handleModalKeydown)
 
   // Drop the #/case/... hash without adding a history entry, so the browser
   // Back button goes to the page the visitor came from, not the closed modal.
@@ -218,8 +125,6 @@ const closeProject = () => {
     history.replaceState(null, '', location.pathname + location.search)
   }
 
-  lastFocusedEl?.focus?.()
-  lastFocusedEl = null
 }
 
 // Keep the modal in sync with the URL (Back/Forward buttons, pasted deep links)
@@ -250,26 +155,6 @@ const syncFromHash = () => {
   }
 }
 
-// Cycle Tab within the modal so keyboard users can't reach the page behind it
-const trapFocus = (e: KeyboardEvent) => {
-  const root = modalRef.value
-  if (!root) return
-  const focusables = Array.from(root.querySelectorAll<HTMLElement>(
-    'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
-  ))
-  if (!focusables.length) return
-  const first = focusables[0]
-  const last = focusables[focusables.length - 1]
-  const active = document.activeElement
-  if (e.shiftKey && (active === first || active === root)) {
-    e.preventDefault()
-    last.focus()
-  } else if (!e.shiftKey && active === last) {
-    e.preventDefault()
-    first.focus()
-  }
-}
-
 onMounted(() => {
   // Support opening a case study straight from a shared URL
   syncFromHash()
@@ -280,21 +165,8 @@ onMounted(() => {
 // or the URL holding a case-study hash that no longer exists.
 onUnmounted(() => {
   document.body.style.overflow = ''
-  document.removeEventListener('keydown', handleModalKeydown)
   window.removeEventListener('hashchange', syncFromHash)
 })
-
-const nextSlide = () => {
-  if (selectedProject.value?.slides) {
-    activeSlideIndex.value = (activeSlideIndex.value + 1) % selectedProject.value.slides.length
-  }
-}
-
-const prevSlide = () => {
-  if (selectedProject.value?.slides) {
-    activeSlideIndex.value = (activeSlideIndex.value - 1 + selectedProject.value.slides.length) % selectedProject.value.slides.length
-  }
-}
 </script>
 
 <style scoped>

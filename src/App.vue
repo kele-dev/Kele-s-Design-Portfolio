@@ -103,150 +103,20 @@
 
     <main id="main">
     <!-- Hero Section -->
-    <section class="hero-section" id="hero">
-      <div class="container hero-container">
-        <div class="hero-content" v-motion-fade @pointerenter="handleHeroPointerEnter" @pointerleave="handleHeroPointerLeave" @focusin="handleHeroFocusIn" @focusout="handleHeroFocusOut">
-          <div class="hero-badge-wrapper">
-            <div class="hero-badge">
-              <span>Branding</span>
-              <div class="badge-semicircle"></div>
-              <span>Graphic Design</span>
-              <div class="badge-semicircle"></div>
-              <span>Web Development</span>
-            </div>
-          </div>
-          
-          <h1 class="hero-title">
-            <span class="headline-container">
-              <Transition name="headline-slide" mode="out-in">
-                <span :key="activeHeadlineIndex" class="light-title headline-text">
-                  <span class="phrase-line">{{ headlines[activeHeadlineIndex].line1 }}</span>
-                  <span class="phrase-line">{{ headlines[activeHeadlineIndex].line2 }}</span>
-                </span>
-              </Transition>
-            </span>
-            <span class="text-accent-gradient bold-title">Through Design.</span>
-          </h1>
-          
-          <p class="hero-desc">
-            Halo! Saya <span class="highlight-name">Bagus Hari Wijaya</span>, desainer di balik <strong>kele design studio</strong>. Menghasilkan sistem identitas merek, desain website, dan materi visual promosi yang fungsional berestetika tinggi ala studio agensi profesional.
-          </p>
-          
-          <div class="hero-buttons">
-            <a href="#works" class="btn-primary interactive">
-              Explore Projects
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m19 9-7 7-7-7"/></svg>
-            </a>
-            <a href="#about" class="btn-outline interactive">About Studio</a>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Draggable Stickers Playground Overlay -->
-      <InteractiveStickers />
-    </section>
+    <!-- Hero -->
+    <HeroSection />
 
     <!-- Works / Portfolio Section -->
     <PortfolioGrid />
 
-    <!-- About Section -->
-    <section class="about-section section-padding" id="about">
-      <div class="container">
-        <div class="about-grid">
-          <!-- Left Visual Element -->
-          <div class="about-visual-col" v-motion-slide-visible-once-left>
-            <div class="avatar-card glass-panel interactive">
-              <div class="avatar-photo-wrapper">
-                <div class="photo-backdrop-circle"></div>
-                <div class="photo-backdrop-semicircle"></div>
-                <img src="/assets/bagus_photo.webp" alt="Bagus Hari Wijaya, kele design" class="user-photo" width="678" height="930" loading="lazy" decoding="async" />
-              </div>
-              <div class="avatar-card-info">
-                <p class="avatar-name">Bagus Hari Wijaya</p>
-                <p>Graphic & Brand Designer, kele design</p>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Right Content Element -->
-          <div class="about-content-col" v-motion-slide-visible-once-right>
-            <span class="category-pill">About Me</span>
-            <h2 class="about-title text-gradient">Siapa di Balik Kele Design?</h2>
-            
-            <p class="about-p">
-              Saya adalah seorang desainer grafis & merek independen berbasis di Jakarta. Berfokus pada pengembangan sistem identitas brand (logo hingga merchandise), desain website digital (UI/UX), dan pendampingan visual usaha lokal (UMKM).
-            </p>
-            <p class="about-p">
-              Bagi saya, desain bukan hanya tentang menyusun tata letak yang rapi, melainkan juga tentang menceritakan sebuah kisah dengan cara yang menyenangkan. Saya menyisipkan sentuhan playful khas studio ke dalam karya-karya profesional agar menghasilkan impresi visual yang kuat.
-            </p>
-            
-            <div class="skills-wrapper">
-              <h3 class="skills-title">Keahlian & Bidang Fokus:</h3>
-              <div class="skills-tags">
-                <span class="skill-tag glass-panel" v-for="skill in skills" :key="skill">{{ skill }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- About -->
+    <AboutSection />
 
     <!-- UMKM Impact Showcase Section -->
     <UmkmImpact />
 
-    <!-- Contact Section -->
-    <section class="contact-section section-padding" id="contact">
-      <div class="container">
-        <div class="contact-card glass-panel" v-motion-slide-visible-once-bottom>
-          <div class="contact-header">
-            <span class="category-pill">Contact</span>
-            <h2 class="contact-title text-gradient">Mulai Proyek Bersama!</h2>
-            <p class="contact-desc">
-              Punya ide menarik yang ingin diwujudkan? Silakan kirim pesan atau hubungi saya langsung di email!
-            </p>
-          </div>
-          
-          <div class="contact-content-grid">
-            <div class="contact-info-col">
-              <div class="contact-item">
-                <span class="item-label">Email Resmi</span>
-                <a href="mailto:kele.designid@gmail.com" class="item-val link-hover interactive">kele.designid@gmail.com</a>
-              </div>
-              <div class="contact-item">
-                <span class="item-label">Lokasi</span>
-                <span class="item-val">Jakarta, Indonesia</span>
-              </div>
-            </div>
-            
-            <!-- The form composes a mailto: link from the fields so submissions
-                 genuinely reach kele.designid@gmail.com without a backend. -->
-            <form class="contact-form" @submit.prevent="handleSubmit">
-              <div class="form-group">
-                <label for="name">Nama Anda</label>
-                <input type="text" id="name" v-model="form.name" required class="form-input interactive" placeholder="Bagus Wijaya" />
-              </div>
-              <div class="form-group">
-                <label for="email">Alamat Email</label>
-                <input type="email" id="email" v-model="form.email" required class="form-input interactive" placeholder="nama@email.com" />
-              </div>
-              <div class="form-group">
-                <label for="message">Pesan Anda</label>
-                <textarea id="message" v-model="form.message" required class="form-input interactive" rows="4" placeholder="Halo Bagus, mari buat proyek..." ></textarea>
-              </div>
-              
-              <button type="submit" class="btn-primary interactive btn-submit">
-                <span>Kirim Pesan</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="send-icon"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-              </button>
-              <p v-if="formFeedback" class="form-feedback" role="status">
-                Aplikasi email Anda sedang dibuka — atau tulis langsung ke
-                <a href="mailto:kele.designid@gmail.com" class="interactive">kele.designid@gmail.com</a>.
-              </p>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- Contact -->
+    <ContactSection />
     </main>
 
     <!-- Footer -->
@@ -262,18 +132,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
+import { ref, nextTick, onMounted, onUnmounted } from 'vue'
 import StudioPreloader from './components/StudioPreloader.vue'
 import SideBadge from './components/SideBadge.vue'
 import CreativeBackground from './components/CreativeBackground.vue'
 import KeleLogo from './components/KeleLogo.vue'
 import CustomCursor from './components/CustomCursor.vue'
-import InteractiveStickers from './components/InteractiveStickers.vue'
+import HeroSection from './components/HeroSection.vue'
+import AboutSection from './components/AboutSection.vue'
+import ContactSection from './components/ContactSection.vue'
 import PortfolioGrid from './components/PortfolioGrid.vue'
 import UmkmImpact from './components/UmkmImpact.vue'
 import { useTheme } from './composables/useTheme'
 import { useMotionPause } from './composables/useMotionPause'
-import { headlines, skills } from './content'
 import { trackEvent } from './analytics'
 
 // Playful Accent Color Theme Cycling Logic (persisted to localStorage)
@@ -281,31 +152,6 @@ const { themeAngle, themeStyles, cycleTheme } = useTheme()
 
 // Ambient animation pause (starts paused under prefers-reduced-motion)
 const { motionPaused, toggleMotion } = useMotionPause()
-
-const activeHeadlineIndex = ref(0)
-let headlineTimer: number | undefined
-
-// Form Submission: compose a mailto: with the filled fields
-const form = reactive({
-  name: '',
-  email: '',
-  message: ''
-})
-
-const handleSubmit = () => {
-  const subject = encodeURIComponent(`Proyek baru dari ${form.name}`)
-  const body = encodeURIComponent(
-    `Halo Bagus,\n\nNama: ${form.name}\nEmail: ${form.email}\n\nPesan:\n${form.message}`
-  )
-  trackEvent('contact_submit', 'mailto form')
-  window.location.href = `mailto:kele.designid@gmail.com?subject=${subject}&body=${body}`
-  // Visible feedback: webmail-only users see nothing happen without this.
-  formFeedback.value = 1
-  window.setTimeout(() => { formFeedback.value = 0 }, 6000)
-}
-
-// 0 = hidden, 1 = "email app opening" hint
-const formFeedback = ref(0)
 
 // Scrolled Header state
 const isScrolled = ref(false)
@@ -403,62 +249,17 @@ const handleMenuResize = () => {
   if (window.innerWidth > 768 && mobileMenuOpen.value) closeMobileMenu()
 }
 
-// Rotate headline every 3.2s, but not while the tab is hidden, motion is
-// paused, or the visitor is reading the hero (pointer over / keyboard focus
-// inside it).
-const heroHovered = ref(false)
-const heroFocused = ref(false)
-const headlinePaused = computed(() =>
-  heroHovered.value || heroFocused.value || motionPaused.value || document.hidden
-)
-
-const startHeadlineTimer = () => {
-  stopHeadlineTimer()
-  headlineTimer = window.setInterval(() => {
-    if (headlinePaused.value) return
-    activeHeadlineIndex.value = (activeHeadlineIndex.value + 1) % headlines.length
-  }, 3200)
-}
-
-const stopHeadlineTimer = () => {
-  if (headlineTimer) {
-    clearInterval(headlineTimer)
-    headlineTimer = undefined
-  }
-}
-
-const handleHeroPointerEnter = () => { heroHovered.value = true }
-const handleHeroPointerLeave = () => { heroHovered.value = false }
-const handleHeroFocusIn = () => { heroFocused.value = true }
-const handleHeroFocusOut = () => { heroFocused.value = false }
-
-const handleVisibility = () => {
-  if (document.hidden || motionPaused.value) stopHeadlineTimer()
-  else startHeadlineTimer()
-}
-
-// Stop the headline rotation while motion is paused, resume when it is played again
-watch(motionPaused, (paused) => {
-  if (paused) stopHeadlineTimer()
-  else if (!document.hidden) startHeadlineTimer()
-})
-
 onMounted(() => {
   measureScroll()
   window.addEventListener('scroll', handleScroll, { passive: true })
   document.addEventListener('keydown', handleMenuEscape)
   window.addEventListener('resize', handleMenuResize)
-  document.addEventListener('visibilitychange', handleVisibility)
-
-  if (!motionPaused.value) startHeadlineTimer()
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
   document.removeEventListener('keydown', handleMenuEscape)
   window.removeEventListener('resize', handleMenuResize)
-  document.removeEventListener('visibilitychange', handleVisibility)
-  stopHeadlineTimer()
   closeMobileMenu()
 })
 </script>
