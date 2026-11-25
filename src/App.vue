@@ -711,16 +711,6 @@ onUnmounted(() => {
 }
 
 /* Category Pill Utility */
-.category-pill {
-  display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-  margin-bottom: 0.75rem;
-}
-
 /* Mobile Responsiveness for Header */
 @media (max-width: 768px) {
   .nav-links {

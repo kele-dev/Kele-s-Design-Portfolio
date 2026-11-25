@@ -294,20 +294,6 @@ const prevSlide = () => {
   margin: 0 auto 50px;
 }
 
-.category-pill {
-  background: rgba(var(--color-primary-rgb), 0.1);
-  color: var(--color-primary-text);
-  border: 1px solid rgba(var(--color-primary-rgb), 0.2);
-  padding: 6px 16px;
-  border-radius: 50px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  display: inline-block;
-  margin-bottom: 16px;
-}
-
 .section-title {
   font-size: 2.5rem;
   font-weight: 800;
