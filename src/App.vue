@@ -159,7 +159,7 @@
               <div class="avatar-photo-wrapper">
                 <div class="photo-backdrop-circle"></div>
                 <div class="photo-backdrop-semicircle"></div>
-                <img src="/assets/bagus_photo.png" alt="Bagus Hari Wijaya, kele design" class="user-photo" width="678" height="930" loading="lazy" decoding="async" />
+                <img src="/assets/bagus_photo.webp" alt="Bagus Hari Wijaya, kele design" class="user-photo" width="678" height="930" loading="lazy" decoding="async" />
               </div>
               <div class="avatar-card-info">
                 <p class="avatar-name">Bagus Hari Wijaya</p>

@@ -58,11 +58,11 @@ export const projects: Project[] = [
     badge: 'Proyek konsep',
     mediaFormats: 'Logo System • Guidelines • Merchandise • Packaging',
     shortDesc: 'Sistem identitas merek komplit dari konstruksi logo, panduan warna, hingga kaos merchandise dan stiker kemasan.',
-    image: '/assets/branding_mockup.png',
+    image: '/assets/branding_mockup.webp',
     slides: [
-      '/assets/branding_mockup.png',
-      '/assets/illustration_mockup.png',
-      '/assets/typography_mockup.png'
+      '/assets/branding_mockup.webp',
+      '/assets/illustration_mockup.webp',
+      '/assets/typography_mockup.webp'
     ],
     client: 'Konsep: kedai kopi & bakery',
     year: '2024',
@@ -78,10 +78,10 @@ export const projects: Project[] = [
     badge: 'Proyek konsep',
     mediaFormats: 'Website Design • UI/UX • Interactive Landing Page',
     shortDesc: 'Desain website antarmuka interaktif dan landing page promosi aplikasi dengan visualisasi data gelap imersif.',
-    image: '/assets/ui_ux_mockup.png',
+    image: '/assets/ui_ux_mockup.webp',
     slides: [
-      '/assets/ui_ux_mockup.png',
-      '/assets/typography_mockup.png'
+      '/assets/ui_ux_mockup.webp',
+      '/assets/typography_mockup.webp'
     ],
     client: 'Konsep: aplikasi web SaaS',
     year: '2025',
@@ -97,10 +97,10 @@ export const projects: Project[] = [
     badge: 'Proyek konsep',
     mediaFormats: 'Social Media Feed • Menu Poster • POS Display',
     shortDesc: 'Koleksi materi promosi cetak & digital tempat makan lokal meliputi menu fisik, feed Instagram, dan banner toko.',
-    image: '/assets/illustration_mockup.png',
+    image: '/assets/illustration_mockup.webp',
     slides: [
-      '/assets/illustration_mockup.png',
-      '/assets/branding_mockup.png'
+      '/assets/illustration_mockup.webp',
+      '/assets/branding_mockup.webp'
     ],
     client: 'Konsep: warung makan lokal',
     year: '2024',
@@ -116,10 +116,10 @@ export const projects: Project[] = [
     badge: 'Proyek konsep',
     mediaFormats: 'Lookbook Feed • Merchandise • Launch Poster',
     shortDesc: 'Desain kampanye brand pakaian street-style meliputi seri poster acara, merchandise kaos, dan lookbook sosial media.',
-    image: '/assets/typography_mockup.png',
+    image: '/assets/typography_mockup.webp',
     slides: [
-      '/assets/typography_mockup.png',
-      '/assets/branding_mockup.png'
+      '/assets/typography_mockup.webp',
+      '/assets/branding_mockup.webp'
     ],
     client: 'Konsep: brand streetwear',
     year: '2024',

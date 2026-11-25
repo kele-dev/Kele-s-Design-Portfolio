@@ -37,7 +37,7 @@
           @keydown.space.prevent="openProject(project)"
         >
           <div class="project-image-wrapper">
-            <img :src="project.image" :alt="project.title" class="project-image" width="1024" height="1024" loading="lazy" decoding="async" />
+            <img :src="project.image" :alt="project.title" class="project-image" width="1024" height="1024" loading="lazy" decoding="async" :srcset="`${project.image.replace('.webp', '-480.webp')} 480w, ${project.image} 1024w`" sizes="(max-width: 768px) 92vw, 30vw" />
             
             <!-- Special Project Badge Tag -->
             <div v-if="project.badge" class="special-badge-pill">
