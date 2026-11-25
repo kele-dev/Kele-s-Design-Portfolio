@@ -12,5 +12,12 @@ app.config.errorHandler = (err, _instance, info) => {
 }
 
 app.use(MotionPlugin)
+// Non-blocking Google Fonts load (CSP-safe: no inline event handlers).
+const FONT_CSS = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap'
+const fontLink = document.createElement('link')
+fontLink.rel = 'stylesheet'
+fontLink.href = FONT_CSS
+document.head.appendChild(fontLink)
+
 app.mount('#app')
 
