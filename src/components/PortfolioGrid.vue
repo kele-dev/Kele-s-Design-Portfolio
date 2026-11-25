@@ -66,11 +66,13 @@
       </TransitionGroup>
 
       <!-- Case Study Modal with Multi-Slide Viewer. Deep-linkable via #/case/<slug>. -->
-      <CaseStudyModal
-        v-if="selectedProject"
-        :project="selectedProject"
-        @close="closeProject"
-      />
+      <Teleport to="body">
+        <CaseStudyModal
+          v-if="selectedProject"
+          :project="selectedProject"
+          @close="closeProject"
+        />
+      </Teleport>
     </div>
   </section>
 </template>
@@ -98,9 +100,19 @@ const filteredProjects = computed(() => {
 
 const CASE_HASH = /^#\/case\/(.+)$/
 
+// Keep screen-reader users inside the dialog: the page behind it goes inert
+// while the (teleported) modal is open.
+const setBackgroundInert = (inert: boolean) => {
+  document.querySelectorAll('header, main, footer').forEach(el => {
+    if (inert) el.setAttribute('inert', '')
+    else el.removeAttribute('inert')
+  })
+}
+
 const openProject = (project: Project, opts: { syncHash?: boolean } = {}) => {
   trackEvent('case_open', project.title)
   selectedProject.value = project
+  setBackgroundInert(true)
 
   // Reflect the open case study in the URL without triggering hashchange
   if (opts.syncHash !== false) {
@@ -118,6 +130,7 @@ const openProject = (project: Project, opts: { syncHash?: boolean } = {}) => {
 const closeProject = () => {
   if (!selectedProject.value) return
   selectedProject.value = null
+  setBackgroundInert(false)
 
   // Drop the #/case/... hash without adding a history entry, so the browser
   // Back button goes to the page the visitor came from, not the closed modal.
@@ -165,6 +178,7 @@ onMounted(() => {
 // or the URL holding a case-study hash that no longer exists.
 onUnmounted(() => {
   document.body.style.overflow = ''
+  setBackgroundInert(false)
   window.removeEventListener('hashchange', syncFromHash)
 })
 </script>

@@ -101,7 +101,7 @@
       </div>
     </Transition>
 
-    <main id="main">
+    <main id="main" :inert="mobileMenuOpen || undefined">
     <!-- Hero Section -->
     <!-- Hero -->
     <HeroSection />
@@ -120,7 +120,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer" :inert="mobileMenuOpen || undefined">
       <div class="container footer-container">
         <div class="footer-left">
           <span class="footer-logo">kele.</span>

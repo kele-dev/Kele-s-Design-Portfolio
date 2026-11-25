@@ -46,9 +46,9 @@ describe('PortfolioGrid deep links', () => {
     const wrapper = mount(PortfolioGrid, { attachTo: document.body })
     await flushPromises()
 
-    expect(wrapper.vm.$data ?? true).toBeTruthy()
-    const modal = wrapper.find('.modal-overlay, .project-modal, [role="dialog"]')
-    expect(modal.exists()).toBe(true)
+    // The modal is teleported to document.body, outside the wrapper.
+    const modal = document.querySelector('.modal-overlay, .project-modal, [role="dialog"]')
+    expect(modal).toBeTruthy()
     wrapper.unmount()
     window.location.hash = ''
   })
