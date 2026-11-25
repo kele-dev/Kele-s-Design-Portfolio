@@ -139,6 +139,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { categories, projects as allProjects, type Project } from '../content'
+import { trackEvent } from '../analytics'
 
 const activeCategory = ref('All')
 const selectedProject = ref<Project | null>(null)
@@ -177,6 +178,7 @@ const closeBtnRef = ref<HTMLButtonElement | null>(null)
 let lastFocusedEl: HTMLElement | null = null
 
 const openProject = (project: Project, opts: { syncHash?: boolean } = {}) => {
+  trackEvent('case_open', project.title)
   selectedProject.value = project
   activeSlideIndex.value = 0
   document.body.style.overflow = 'hidden' // prevent body scrolling

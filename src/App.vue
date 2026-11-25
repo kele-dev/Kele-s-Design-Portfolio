@@ -49,7 +49,7 @@
             <div class="theme-icon-semicircle" aria-hidden="true" :style="{ transform: `rotate(${themeAngle}deg)` }"></div>
           </button>
 
-          <a href="#contact" class="btn-proposal-pill interactive">
+          <a href="#contact" class="btn-proposal-pill interactive" @click="trackEvent('cta_click', 'get-proposal')">
             Get Proposal
           </a>
 
@@ -94,7 +94,7 @@
           >
             {{ link.label }}
           </a>
-          <a href="#contact" class="btn-proposal-pill interactive mobile-menu-cta" @click="closeMobileMenu">
+          <a href="#contact" class="btn-proposal-pill interactive mobile-menu-cta" @click="closeMobileMenu(); trackEvent('cta_click', 'get-proposal-mobile')">
             Get Proposal
           </a>
         </nav>
@@ -274,6 +274,7 @@ import UmkmImpact from './components/UmkmImpact.vue'
 import { useTheme } from './composables/useTheme'
 import { useMotionPause } from './composables/useMotionPause'
 import { headlines, skills } from './content'
+import { trackEvent } from './analytics'
 
 // Playful Accent Color Theme Cycling Logic (persisted to localStorage)
 const { themeAngle, themeStyles, cycleTheme } = useTheme()
@@ -296,6 +297,7 @@ const handleSubmit = () => {
   const body = encodeURIComponent(
     `Halo Bagus,\n\nNama: ${form.name}\nEmail: ${form.email}\n\nPesan:\n${form.message}`
   )
+  trackEvent('contact_submit', 'mailto form')
   window.location.href = `mailto:kele.designid@gmail.com?subject=${subject}&body=${body}`
   // Visible feedback: webmail-only users see nothing happen without this.
   formFeedback.value = 1
