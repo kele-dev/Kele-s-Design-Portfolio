@@ -115,6 +115,9 @@
     <!-- UMKM Impact Showcase Section -->
     <UmkmImpact />
 
+    <!-- Client testimonials (renders only once real quotes are added) -->
+    <TestimonialSection />
+
     <!-- Contact -->
     <ContactSection />
     </main>
@@ -143,6 +146,7 @@ import AboutSection from './components/AboutSection.vue'
 import ContactSection from './components/ContactSection.vue'
 import PortfolioGrid from './components/PortfolioGrid.vue'
 import UmkmImpact from './components/UmkmImpact.vue'
+import TestimonialSection from './components/TestimonialSection.vue'
 import { useTheme } from './composables/useTheme'
 import { useMotionPause } from './composables/useMotionPause'
 import { trackEvent } from './analytics'

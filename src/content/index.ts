@@ -199,3 +199,15 @@ export const stickers: Sticker[] = [
   { id: 5, text: '👋 Halo, Saya Bagus', x: 0, y: 0, zIndex: 5, bg: '#00cc99', color: '#080d1a', border: '3px solid #ffffff' },
   { id: 6, text: 'Plus Jakarta Sans', x: 0, y: 0, zIndex: 6, bg: 'rgba(8, 13, 26, 0.95)', color: '#ffd200', border: '1px solid rgba(255, 255, 255, 0.2)' }
 ]
+
+export interface Testimonial {
+  quote: string
+  name: string
+  role: string
+  project?: string
+}
+
+// Client testimonials. Empty until real client references are collected —
+// the section renders only when this array has entries.
+// Fill with real quotes from actual clients (never fabricated).
+export const testimonials: Testimonial[] = []
