@@ -7,6 +7,9 @@
         <p class="section-subtitle">
           Dari logo, identitas merek, merchandise, antarmuka website, hingga materi promosi usaha lokal.
         </p>
+        <p v-if="deepLinkNotFound" class="deep-link-notice" role="status">
+          Case study yang kamu cari tidak ditemukan — tautan mungkin kedaluwarsa. Silakan lihat semua proyek di bawah.
+        </p>
       </div>
 
       <!-- Category Filter -->
@@ -220,6 +223,8 @@ const closeProject = () => {
 }
 
 // Keep the modal in sync with the URL (Back/Forward buttons, pasted deep links)
+const deepLinkNotFound = ref(false)
+
 const syncFromHash = () => {
   const match = location.hash.match(CASE_HASH)
   if (match) {
@@ -234,6 +239,11 @@ const syncFromHash = () => {
     const project = slugIndex.get(slug)
     if (project && selectedProject.value?.id !== project.id) {
       openProject(project, { syncHash: false })
+    } else if (!project) {
+      // Stale or mistyped shared link: say so instead of rendering nothing,
+      // then drop the dead hash so a reload lands on the works section.
+      deepLinkNotFound.value = true
+      history.replaceState(null, '', location.pathname + location.search)
     }
   } else if (selectedProject.value) {
     closeProject()
@@ -440,7 +450,13 @@ const prevSlide = () => {
   .project-overlay {
     opacity: 0.55;
   }
-  .view-pill {
+  .deep-link-notice {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: var(--color-primary-text);
+}
+
+.view-pill {
     transform: translateY(0);
   }
 }
