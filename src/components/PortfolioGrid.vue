@@ -225,7 +225,7 @@ const syncFromHash = () => {
   if (match) {
     // decodeURIComponent throws on malformed hashes like #/case/% — never let
     // a hand-edited URL break the hashchange handler.
-    let slug = ''
+    let slug: string
     try {
       slug = decodeURIComponent(match[1])
     } catch {
