@@ -429,8 +429,20 @@ const prevSlide = () => {
   -webkit-backdrop-filter: blur(4px);
 }
 
-.project-card:hover .project-overlay {
+.project-card:hover .project-overlay,
+.project-card:focus-within .project-overlay {
   opacity: 1;
+}
+
+/* Coarse pointers (touch) never hover: keep a subtle persistent affordance
+   so the "view suite" action is discoverable without a tap-first experiment. */
+@media (pointer: coarse) {
+  .project-overlay {
+    opacity: 0.55;
+  }
+  .view-pill {
+    transform: translateY(0);
+  }
 }
 
 .view-pill {
