@@ -1,6 +1,6 @@
 # Dual-Theme Studio & Visual Identity Aesthetic Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> Note: this plan was originally written for a subagent-driven agent workflow. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Transform Kele's Design Portfolio into a world-class studio website inspired by visualidentity.studio, featuring a dynamic Dual-Theme Switcher (Light Studio & Dark Glass), Floating Glassmorphic Header, Vertical Side Badge, Studio Preloader, and high-editorial portfolio grid cards.
 

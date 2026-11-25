@@ -1,6 +1,6 @@
 # Multi-Industry Portfolio Visual Suites Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> Note: this plan was originally written for a subagent-driven agent workflow. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Update `src/components/PortfolioGrid.vue` with an industry-based category filter system, multi-media visual suite cards, and detailed case-study modals for multi-industry design showcases.
 

@@ -40,6 +40,7 @@ export interface Project {
   shortDesc: string
   image: string
   slides?: string[]
+  slideAlts?: string[]
   client: string
   year: string
   role: string
@@ -58,12 +59,13 @@ export const projects: Project[] = [
     badge: 'Proyek konsep',
     mediaFormats: 'Logo System • Guidelines • Merchandise • Packaging',
     shortDesc: 'Sistem identitas merek komplit dari konstruksi logo, panduan warna, hingga kaos merchandise dan stiker kemasan.',
-    image: '/assets/branding_mockup.png',
+    image: '/assets/branding_mockup.webp',
     slides: [
-      '/assets/branding_mockup.png',
-      '/assets/illustration_mockup.png',
-      '/assets/typography_mockup.png'
+      '/assets/branding_mockup.webp',
+      '/assets/illustration_mockup.webp',
+      '/assets/typography_mockup.webp'
     ],
+    slideAlts: ['Branding mockup: logo system pada kemasan dan merchandise Kele Artisan Coffee', 'Illustration mockup: ilustrasi pendukung identitas', 'Typography mockup: ekspresi tipografi merek'],
     client: 'Konsep: kedai kopi & bakery',
     year: '2024',
     role: 'Lead Brand System Designer',
@@ -78,11 +80,12 @@ export const projects: Project[] = [
     badge: 'Proyek konsep',
     mediaFormats: 'Website Design • UI/UX • Interactive Landing Page',
     shortDesc: 'Desain website antarmuka interaktif dan landing page promosi aplikasi dengan visualisasi data gelap imersif.',
-    image: '/assets/ui_ux_mockup.png',
+    image: '/assets/ui_ux_mockup.webp',
     slides: [
-      '/assets/ui_ux_mockup.png',
-      '/assets/typography_mockup.png'
+      '/assets/ui_ux_mockup.webp',
+      '/assets/typography_mockup.webp'
     ],
+    slideAlts: ['UI/UX mockup: tampilan antarmuka web', 'Typography mockup: ekspresi tipografi merek'],
     client: 'Konsep: aplikasi web SaaS',
     year: '2025',
     role: 'Web UI/UX Designer',
@@ -97,11 +100,12 @@ export const projects: Project[] = [
     badge: 'Proyek konsep',
     mediaFormats: 'Social Media Feed • Menu Poster • POS Display',
     shortDesc: 'Koleksi materi promosi cetak & digital tempat makan lokal meliputi menu fisik, feed Instagram, dan banner toko.',
-    image: '/assets/illustration_mockup.png',
+    image: '/assets/illustration_mockup.webp',
     slides: [
-      '/assets/illustration_mockup.png',
-      '/assets/branding_mockup.png'
+      '/assets/illustration_mockup.webp',
+      '/assets/branding_mockup.webp'
     ],
+    slideAlts: ['Illustration mockup: ilustrasi pendukung identitas', 'Branding mockup: logo system pada kemasan dan merchandise'],
     client: 'Konsep: warung makan lokal',
     year: '2024',
     role: 'F&B Visual Designer',
@@ -116,11 +120,12 @@ export const projects: Project[] = [
     badge: 'Proyek konsep',
     mediaFormats: 'Lookbook Feed • Merchandise • Launch Poster',
     shortDesc: 'Desain kampanye brand pakaian street-style meliputi seri poster acara, merchandise kaos, dan lookbook sosial media.',
-    image: '/assets/typography_mockup.png',
+    image: '/assets/typography_mockup.webp',
     slides: [
-      '/assets/typography_mockup.png',
-      '/assets/branding_mockup.png'
+      '/assets/typography_mockup.webp',
+      '/assets/branding_mockup.webp'
     ],
+    slideAlts: ['Typography mockup: ekspresi tipografi merek', 'Branding mockup: logo system pada kemasan dan merchandise'],
     client: 'Konsep: brand streetwear',
     year: '2024',
     role: 'Fashion Campaign & Merch Designer',
@@ -194,3 +199,15 @@ export const stickers: Sticker[] = [
   { id: 5, text: '👋 Halo, Saya Bagus', x: 0, y: 0, zIndex: 5, bg: '#00cc99', color: '#080d1a', border: '3px solid #ffffff' },
   { id: 6, text: 'Plus Jakarta Sans', x: 0, y: 0, zIndex: 6, bg: 'rgba(8, 13, 26, 0.95)', color: '#ffd200', border: '1px solid rgba(255, 255, 255, 0.2)' }
 ]
+
+export interface Testimonial {
+  quote: string
+  name: string
+  role: string
+  project?: string
+}
+
+// Client testimonials. Empty until real client references are collected —
+// the section renders only when this array has entries.
+// Fill with real quotes from actual clients (never fabricated).
+export const testimonials: Testimonial[] = []

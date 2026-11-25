@@ -21,10 +21,21 @@ import { ref, onMounted } from 'vue'
 const visible = ref(true)
 
 onMounted(() => {
+  // Fast loads and repeat visits skip the branding delay entirely: the hero
+  // (the must-not-fail content) shows immediately.
+  const mountTime = performance.now()
+  let seenFastLoad = false
+  try {
+    seenFastLoad = window.sessionStorage.getItem('kele-visited') === '1'
+    window.sessionStorage.setItem('kele-visited', '1')
+  } catch {
+    // sessionStorage unavailable: fall through to the timed path
+  }
+
   const hide = () => {
     setTimeout(() => {
       visible.value = false
-    }, 600)
+    }, seenFastLoad || performance.now() - mountTime < 300 ? 0 : 600)
   }
 
   if (document.readyState === 'complete') {

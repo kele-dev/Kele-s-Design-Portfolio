@@ -7,21 +7,28 @@
         <p class="section-subtitle">
           Dari logo, identitas merek, merchandise, antarmuka website, hingga materi promosi usaha lokal.
         </p>
+        <p v-if="deepLinkNotFound" class="deep-link-notice" role="status">
+          Case study yang kamu cari tidak ditemukan — tautan mungkin kedaluwarsa. Silakan lihat semua proyek di bawah.
+        </p>
       </div>
 
       <!-- Category Filter -->
-      <div class="filter-wrapper interactive">
+      <div class="filter-wrapper" role="group" aria-label="Filter kategori proyek">
         <button 
           v-for="cat in categories" 
           :key="cat"
           class="filter-btn"
           :class="{ 'active': activeCategory === cat }"
+          :aria-pressed="activeCategory === cat ? 'true' : 'false'"
           @click="activeCategory = cat"
         >
           {{ cat }}
           <div v-if="activeCategory === cat" class="active-dot"></div>
         </button>
       </div>
+      <p class="filter-status" role="status" aria-live="polite">
+        Menampilkan {{ filteredProjects.length }} proyek, kategori: {{ activeCategory === 'All' ? 'semua' : activeCategory }}
+      </p>
 
       <!-- Portfolio Grid with TransitionGroup for layout animations -->
       <TransitionGroup name="grid" tag="div" class="portfolio-grid">
@@ -37,7 +44,7 @@
           @keydown.space.prevent="openProject(project)"
         >
           <div class="project-image-wrapper">
-            <img :src="project.image" :alt="project.title" class="project-image" width="1024" height="1024" loading="lazy" decoding="async" />
+            <img :src="project.image" :alt="project.title" class="project-image" width="1024" height="1024" loading="lazy" decoding="async" :srcset="`${project.image.replace('.webp', '-480.webp')} 480w, ${project.image} 1024w`" sizes="(max-width: 768px) 92vw, 30vw" />
             
             <!-- Special Project Badge Tag -->
             <div v-if="project.badge" class="special-badge-pill">
@@ -63,86 +70,25 @@
       </TransitionGroup>
 
       <!-- Case Study Modal with Multi-Slide Viewer. Deep-linkable via #/case/<slug>. -->
-      <Transition name="modal">
-        <div
+      <Teleport to="body">
+        <CaseStudyModal
           v-if="selectedProject"
-          class="modal-overlay"
-          role="dialog"
-          aria-modal="true"
-          :aria-label="selectedProject.title"
-          @click.self="closeProject"
-          @keydown.tab="trapFocus"
-        >
-          <div class="modal-content glass-panel" ref="modalRef">
-            <button ref="closeBtnRef" class="modal-close-btn interactive" aria-label="Tutup" @click="closeProject">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-            </button>
-            
-            <div class="modal-body">
-              <!-- Multi-Slide Image Container -->
-              <div class="modal-image-container">
-                <img :src="currentSlideImage" :alt="selectedProject.title" class="modal-image" width="1024" height="1024" />
-                
-                <!-- Slide Navigation Controls if project has multiple slides -->
-                <div v-if="selectedProject.slides && selectedProject.slides.length > 1" class="slide-nav-controls">
-                  <button @click="prevSlide" class="slide-btn interactive" aria-label="Slide sebelumnya" title="Slide Sebelumnya">‹</button>
-                  <span class="slide-indicator">{{ activeSlideIndex + 1 }} / {{ selectedProject.slides.length }}</span>
-                  <button @click="nextSlide" class="slide-btn interactive" aria-label="Slide selanjutnya" title="Slide Selanjutnya">›</button>
-                </div>
-              </div>
-
-              <!-- Modal Text Content -->
-              <div class="modal-text-content">
-                <div class="modal-header-info">
-                  <div class="modal-badge-row">
-                    <span v-if="selectedProject.badge" class="special-badge-pill modal-special-badge">{{ selectedProject.badge }}</span>
-                    <span class="modal-category">{{ selectedProject.category }}</span>
-                  </div>
-                  <h2 class="modal-title">{{ selectedProject.title }}</h2>
-                </div>
-                
-                <div class="modal-meta-grid">
-                  <div class="meta-item">
-                    <span class="meta-label">Sektor</span>
-                    <span class="meta-val">{{ selectedProject.client }}</span>
-                  </div>
-                  <div class="meta-item">
-                    <span class="meta-label">Tahun</span>
-                    <span class="meta-val">{{ selectedProject.year }}</span>
-                  </div>
-                  <div class="meta-item">
-                    <span class="meta-label">Peran Desain</span>
-                    <span class="meta-val">{{ selectedProject.role }}</span>
-                  </div>
-                </div>
-                
-                <div class="modal-divider"></div>
-                
-                <div class="modal-desc-section">
-                  <h3 class="modal-section-title">Tantangan Komunikasi Visual</h3>
-                  <p class="modal-paragraph">{{ selectedProject.challenge }}</p>
-                </div>
-                
-                <div class="modal-desc-section">
-                  <h3 class="modal-section-title">Solusi Layout & Branding</h3>
-                  <p class="modal-paragraph">{{ selectedProject.solution }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Transition>
+          :project="selectedProject"
+          @close="closeProject"
+        />
+      </Teleport>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { categories, projects as allProjects, type Project } from '../content'
+import { trackEvent } from '../analytics'
+import CaseStudyModal from './CaseStudyModal.vue'
 
 const activeCategory = ref('All')
 const selectedProject = ref<Project | null>(null)
-const activeSlideIndex = ref(0)
 
 const projects = allProjects
 
@@ -154,37 +100,23 @@ const filteredProjects = computed(() => {
   return projects.filter(p => p.category === activeCategory.value)
 })
 
-const currentSlideImage = computed(() => {
-  if (!selectedProject.value) return ''
-  if (selectedProject.value.slides && selectedProject.value.slides.length > 0) {
-    return selectedProject.value.slides[activeSlideIndex.value] || selectedProject.value.image
-  }
-  return selectedProject.value.image
-})
-
-const handleModalKeydown = (e: KeyboardEvent) => {
-  if (e.key === 'Escape') closeProject()
-  else if (e.key === 'ArrowRight') nextSlide()
-  else if (e.key === 'ArrowLeft') prevSlide()
-}
-
 /* ----- Deep-linkable case studies (#/case/<slug>) ----- */
 
 const CASE_HASH = /^#\/case\/(.+)$/
 
-const modalRef = ref<HTMLElement | null>(null)
-const closeBtnRef = ref<HTMLButtonElement | null>(null)
-let lastFocusedEl: HTMLElement | null = null
+// Keep screen-reader users inside the dialog: the page behind it goes inert
+// while the (teleported) modal is open.
+const setBackgroundInert = (inert: boolean) => {
+  document.querySelectorAll('header, main, footer').forEach(el => {
+    if (inert) el.setAttribute('inert', '')
+    else el.removeAttribute('inert')
+  })
+}
 
 const openProject = (project: Project, opts: { syncHash?: boolean } = {}) => {
+  trackEvent('case_open', project.title)
   selectedProject.value = project
-  activeSlideIndex.value = 0
-  document.body.style.overflow = 'hidden' // prevent body scrolling
-  document.addEventListener('keydown', handleModalKeydown)
-
-  // Remember what had focus so closing can hand it back
-  lastFocusedEl = document.activeElement as HTMLElement | null
-  nextTick(() => closeBtnRef.value?.focus())
+  setBackgroundInert(true)
 
   // Reflect the open case study in the URL without triggering hashchange
   if (opts.syncHash !== false) {
@@ -202,10 +134,7 @@ const openProject = (project: Project, opts: { syncHash?: boolean } = {}) => {
 const closeProject = () => {
   if (!selectedProject.value) return
   selectedProject.value = null
-  // '' hands scrolling back to the stylesheet; 'auto' would pin it to a value
-  // the page never set in the first place.
-  document.body.style.overflow = ''
-  document.removeEventListener('keydown', handleModalKeydown)
+  setBackgroundInert(false)
 
   // Drop the #/case/... hash without adding a history entry, so the browser
   // Back button goes to the page the visitor came from, not the closed modal.
@@ -213,17 +142,17 @@ const closeProject = () => {
     history.replaceState(null, '', location.pathname + location.search)
   }
 
-  lastFocusedEl?.focus?.()
-  lastFocusedEl = null
 }
 
 // Keep the modal in sync with the URL (Back/Forward buttons, pasted deep links)
+const deepLinkNotFound = ref(false)
+
 const syncFromHash = () => {
   const match = location.hash.match(CASE_HASH)
   if (match) {
     // decodeURIComponent throws on malformed hashes like #/case/% — never let
     // a hand-edited URL break the hashchange handler.
-    let slug = ''
+    let slug: string
     try {
       slug = decodeURIComponent(match[1])
     } catch {
@@ -232,29 +161,14 @@ const syncFromHash = () => {
     const project = slugIndex.get(slug)
     if (project && selectedProject.value?.id !== project.id) {
       openProject(project, { syncHash: false })
+    } else if (!project) {
+      // Stale or mistyped shared link: say so instead of rendering nothing,
+      // then drop the dead hash so a reload lands on the works section.
+      deepLinkNotFound.value = true
+      history.replaceState(null, '', location.pathname + location.search)
     }
   } else if (selectedProject.value) {
     closeProject()
-  }
-}
-
-// Cycle Tab within the modal so keyboard users can't reach the page behind it
-const trapFocus = (e: KeyboardEvent) => {
-  const root = modalRef.value
-  if (!root) return
-  const focusables = Array.from(root.querySelectorAll<HTMLElement>(
-    'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
-  ))
-  if (!focusables.length) return
-  const first = focusables[0]
-  const last = focusables[focusables.length - 1]
-  const active = document.activeElement
-  if (e.shiftKey && (active === first || active === root)) {
-    e.preventDefault()
-    last.focus()
-  } else if (!e.shiftKey && active === last) {
-    e.preventDefault()
-    first.focus()
   }
 }
 
@@ -268,21 +182,9 @@ onMounted(() => {
 // or the URL holding a case-study hash that no longer exists.
 onUnmounted(() => {
   document.body.style.overflow = ''
-  document.removeEventListener('keydown', handleModalKeydown)
+  setBackgroundInert(false)
   window.removeEventListener('hashchange', syncFromHash)
 })
-
-const nextSlide = () => {
-  if (selectedProject.value?.slides) {
-    activeSlideIndex.value = (activeSlideIndex.value + 1) % selectedProject.value.slides.length
-  }
-}
-
-const prevSlide = () => {
-  if (selectedProject.value?.slides) {
-    activeSlideIndex.value = (activeSlideIndex.value - 1 + selectedProject.value.slides.length) % selectedProject.value.slides.length
-  }
-}
 </script>
 
 <style scoped>
@@ -290,20 +192,6 @@ const prevSlide = () => {
   text-align: center;
   max-width: 600px;
   margin: 0 auto 50px;
-}
-
-.category-pill {
-  background: rgba(var(--color-primary-rgb), 0.1);
-  color: var(--color-primary-text);
-  border: 1px solid rgba(var(--color-primary-rgb), 0.2);
-  padding: 6px 16px;
-  border-radius: 50px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  display: inline-block;
-  margin-bottom: 16px;
 }
 
 .section-title {
@@ -320,6 +208,13 @@ const prevSlide = () => {
 }
 
 /* Category Filters */
+.filter-status {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin: -34px 0 10px;
+}
+
 .filter-wrapper {
   display: flex;
   justify-content: center;
@@ -441,8 +336,26 @@ const prevSlide = () => {
   -webkit-backdrop-filter: blur(4px);
 }
 
-.project-card:hover .project-overlay {
+.project-card:hover .project-overlay,
+.project-card:focus-within .project-overlay {
   opacity: 1;
+}
+
+/* Coarse pointers (touch) never hover: keep a subtle persistent affordance
+   so the "view suite" action is discoverable without a tap-first experiment. */
+@media (pointer: coarse) {
+  .project-overlay {
+    opacity: 0.55;
+  }
+  .deep-link-notice {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: var(--color-primary-text);
+}
+
+.view-pill {
+    transform: translateY(0);
+  }
 }
 
 .view-pill {

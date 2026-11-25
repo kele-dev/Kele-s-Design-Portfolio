@@ -14,7 +14,7 @@
           <div 
             v-for="pillar in pillars" 
             :key="pillar.id"
-            class="pillar-card glass-panel interactive"
+            class="pillar-card glass-panel"
           >
             <div class="pillar-icon" :style="{ background: pillar.bg, color: pillar.color }">
               <span>{{ pillar.icon }}</span>

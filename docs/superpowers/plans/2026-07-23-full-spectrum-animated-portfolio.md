@@ -1,6 +1,6 @@
 # Full-Spectrum Animated Portfolio & UMKM Impact Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> Note: this plan was originally written for a subagent-driven agent workflow. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Create `LogoMarquee.vue` (animated logo ticker), `UmkmImpact.vue` (UMKM empowerment section), and enhance `PortfolioGrid.vue` with multi-slide case study modals, special project badges (`⭐ Full Identity`, `🌐 Web Design`, `🌱 UMKM Partner`), and full brand system datasets.
 

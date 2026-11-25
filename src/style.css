@@ -711,3 +711,19 @@ section[id] {
     font-size: 2.2rem;
   }
 }
+
+/* Unified section eyebrow pill: one semantic element, one look
+   (merged from the former App.vue and PortfolioGrid.vue duplicates). */
+.category-pill {
+  display: inline-block;
+  background: rgba(var(--color-primary-rgb), 0.1);
+  color: var(--color-primary-text);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.2);
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
