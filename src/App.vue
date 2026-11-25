@@ -105,7 +105,7 @@
     <!-- Hero Section -->
     <section class="hero-section" id="hero">
       <div class="container hero-container">
-        <div class="hero-content" v-motion-fade>
+        <div class="hero-content" v-motion-fade @pointerenter="handleHeroPointerEnter" @pointerleave="handleHeroPointerLeave" @focusin="handleHeroFocusIn" @focusout="handleHeroFocusOut">
           <div class="hero-badge-wrapper">
             <div class="hero-badge">
               <span>Branding</span>
@@ -262,7 +262,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch, nextTick, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import StudioPreloader from './components/StudioPreloader.vue'
 import SideBadge from './components/SideBadge.vue'
 import CreativeBackground from './components/CreativeBackground.vue'
@@ -401,10 +401,19 @@ const handleMenuResize = () => {
   if (window.innerWidth > 768 && mobileMenuOpen.value) closeMobileMenu()
 }
 
-// Rotate headline every 3.2s, but not while the tab is hidden
+// Rotate headline every 3.2s, but not while the tab is hidden, motion is
+// paused, or the visitor is reading the hero (pointer over / keyboard focus
+// inside it).
+const heroHovered = ref(false)
+const heroFocused = ref(false)
+const headlinePaused = computed(() =>
+  heroHovered.value || heroFocused.value || motionPaused.value || document.hidden
+)
+
 const startHeadlineTimer = () => {
   stopHeadlineTimer()
   headlineTimer = window.setInterval(() => {
+    if (headlinePaused.value) return
     activeHeadlineIndex.value = (activeHeadlineIndex.value + 1) % headlines.length
   }, 3200)
 }
@@ -415,6 +424,11 @@ const stopHeadlineTimer = () => {
     headlineTimer = undefined
   }
 }
+
+const handleHeroPointerEnter = () => { heroHovered.value = true }
+const handleHeroPointerLeave = () => { heroHovered.value = false }
+const handleHeroFocusIn = () => { heroFocused.value = true }
+const handleHeroFocusOut = () => { heroFocused.value = false }
 
 const handleVisibility = () => {
   if (document.hidden || motionPaused.value) stopHeadlineTimer()
