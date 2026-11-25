@@ -129,7 +129,7 @@
           </h1>
           
           <p class="hero-desc">
-            Halo! Saya <span class="highlight-name interactive">Bagus Hari Wijaya</span>, desainer di balik <strong>kele design studio</strong>. Menghasilkan sistem identitas merek, desain website, dan materi visual promosi yang fungsional berestetika tinggi ala studio agensi profesional.
+            Halo! Saya <span class="highlight-name">Bagus Hari Wijaya</span>, desainer di balik <strong>kele design studio</strong>. Menghasilkan sistem identitas merek, desain website, dan materi visual promosi yang fungsional berestetika tinggi ala studio agensi profesional.
           </p>
           
           <div class="hero-buttons">
@@ -183,7 +183,7 @@
             <div class="skills-wrapper">
               <h3 class="skills-title">Keahlian & Bidang Fokus:</h3>
               <div class="skills-tags">
-                <span class="skill-tag glass-panel interactive" v-for="skill in skills" :key="skill">{{ skill }}</span>
+                <span class="skill-tag glass-panel" v-for="skill in skills" :key="skill">{{ skill }}</span>
               </div>
             </div>
           </div>
