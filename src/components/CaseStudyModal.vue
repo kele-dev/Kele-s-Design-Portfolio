@@ -17,7 +17,13 @@
         <div class="modal-body">
           <!-- Multi-Slide Image Container -->
           <div class="modal-image-container">
-            <img :src="currentSlideImage" :alt="project.title" class="modal-image" width="1024" height="1024" />
+            <img
+              :src="currentSlideImage"
+              :alt="project.slideAlts?.[activeSlideIndex] || `${project.title} — slide ${activeSlideIndex + 1}`"
+              class="modal-image"
+              width="1024"
+              height="1024"
+            />
 
             <!-- Slide Navigation Controls if project has multiple slides -->
             <div v-if="project.slides && project.slides.length > 1" class="slide-nav-controls">

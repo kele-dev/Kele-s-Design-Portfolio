@@ -40,6 +40,7 @@ export interface Project {
   shortDesc: string
   image: string
   slides?: string[]
+  slideAlts?: string[]
   client: string
   year: string
   role: string
@@ -64,6 +65,7 @@ export const projects: Project[] = [
       '/assets/illustration_mockup.webp',
       '/assets/typography_mockup.webp'
     ],
+    slideAlts: ['Branding mockup: logo system pada kemasan dan merchandise Kele Artisan Coffee', 'Illustration mockup: ilustrasi pendukung identitas', 'Typography mockup: ekspresi tipografi merek'],
     client: 'Konsep: kedai kopi & bakery',
     year: '2024',
     role: 'Lead Brand System Designer',
@@ -83,6 +85,7 @@ export const projects: Project[] = [
       '/assets/ui_ux_mockup.webp',
       '/assets/typography_mockup.webp'
     ],
+    slideAlts: ['UI/UX mockup: tampilan antarmuka web', 'Typography mockup: ekspresi tipografi merek'],
     client: 'Konsep: aplikasi web SaaS',
     year: '2025',
     role: 'Web UI/UX Designer',
@@ -102,6 +105,7 @@ export const projects: Project[] = [
       '/assets/illustration_mockup.webp',
       '/assets/branding_mockup.webp'
     ],
+    slideAlts: ['Illustration mockup: ilustrasi pendukung identitas', 'Branding mockup: logo system pada kemasan dan merchandise'],
     client: 'Konsep: warung makan lokal',
     year: '2024',
     role: 'F&B Visual Designer',
@@ -121,6 +125,7 @@ export const projects: Project[] = [
       '/assets/typography_mockup.webp',
       '/assets/branding_mockup.webp'
     ],
+    slideAlts: ['Typography mockup: ekspresi tipografi merek', 'Branding mockup: logo system pada kemasan dan merchandise'],
     client: 'Konsep: brand streetwear',
     year: '2024',
     role: 'Fashion Campaign & Merch Designer',
