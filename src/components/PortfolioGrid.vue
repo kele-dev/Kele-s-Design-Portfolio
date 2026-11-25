@@ -13,18 +13,22 @@
       </div>
 
       <!-- Category Filter -->
-      <div class="filter-wrapper interactive">
+      <div class="filter-wrapper" role="group" aria-label="Filter kategori proyek">
         <button 
           v-for="cat in categories" 
           :key="cat"
           class="filter-btn"
           :class="{ 'active': activeCategory === cat }"
+          :aria-pressed="activeCategory === cat ? 'true' : 'false'"
           @click="activeCategory = cat"
         >
           {{ cat }}
           <div v-if="activeCategory === cat" class="active-dot"></div>
         </button>
       </div>
+      <p class="filter-status" role="status" aria-live="polite">
+        Menampilkan {{ filteredProjects.length }} proyek, kategori: {{ activeCategory === 'All' ? 'semua' : activeCategory }}
+      </p>
 
       <!-- Portfolio Grid with TransitionGroup for layout animations -->
       <TransitionGroup name="grid" tag="div" class="portfolio-grid">
@@ -204,6 +208,13 @@ onUnmounted(() => {
 }
 
 /* Category Filters */
+.filter-status {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin: -34px 0 10px;
+}
+
 .filter-wrapper {
   display: flex;
   justify-content: center;
